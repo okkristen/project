@@ -30,16 +30,16 @@ public class ExamineItemController {
      * @param examineItemDTO
      * @return
      */
-    @PostMapping("/findAll")
-    public AjaxResult findAll(@RequestBody ExamineItemDTO examineItemDTO) {
-        if (examineItemDTO == null) {
-            examineItemDTO = new ExamineItemDTO();
-        }
-        examineItemDTO.setGrade("ceceee");
-        List<ExamineItemDTO> list = examineItemService.findByDTO(examineItemDTO);
-        System.out.println(list);
-        return AjaxResult.createSuccessResult(list);
-    }
+//    @PostMapping("/findAll")
+//    public AjaxResult findAll(@RequestBody ExamineItemDTO examineItemDTO) {
+//        if (examineItemDTO == null) {
+//            examineItemDTO = new ExamineItemDTO();
+//        }
+//        examineItemDTO.setGrade("ceceee");
+//        List<ExamineItemDTO> list = examineItemService.findByDTO(examineItemDTO);
+//        System.out.println(list);
+//        return AjaxResult.createSuccessResult(list);
+//    }
 
 //    /**
 //     * 分页查询

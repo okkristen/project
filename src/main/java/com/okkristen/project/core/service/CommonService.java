@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,303 +14,86 @@ import java.util.List;
  */
 public interface CommonService<E, D> {
     /**
-     * 根据ID查找对象
-     * @param id
+     * 根据id 查询 实体类
      */
-    public E findById(String id);
+    public E findById(Serializable id);
     /**
-     * 根据ID查找DTO对象
-     * @param id
+     * 根据id 查询DTO
      */
-    public D findDTOById(String id);
-    /**
-     * 根据ID查找指定类型DTO对象
-     */
-    public <T> T findDTOById(String id, Class<T> dtoClass);
+    public D findDTOById(Serializable id);
 
     /**
-     * 根据实体类查找
+     *根据传类型  返回相对应的类型
      */
-    List<E> findByEntity(E e);
+    public <T>T findDTOById(Serializable id,Class<T> tClass);
     /**
-     * 根据DTO中有值的自动查询，并将结果转换为DTO
-     * 模糊查询
-     * @param dto
+     * 根据 dto 查询 list
      */
-    public List<D> findByDTO(D dto);
+    public List<D> findListByDTO(D dto);
+    /**
+     * 根据 dto 查询 list
+     */
+    public <T>List<T> findListByDTO(D dto,Class<T> tClass);
+    /**
+     * 根据 entity 查询 list
+     */
+    public List<E> findListByEntity(E entity);
 
     /**
-     * 查找元素是否存在
-     * @param dto
-     * @return
+     * 根据 dto 查询 list
      */
-    boolean findExist(D dto);
+    public List<D> findListByDTO(D dto,Sort sort);
     /**
-     * 根据DTO中有值的自动查询，并将结果转换为DTO
-     * @param dto
-     * @param accurateQuery 是否精确查找
+     * 根据 dto 查询 list
      */
-    public List<D> findByDTO(D dto, boolean accurateQuery);
+    public <T>List<T> findListByDTO(D dto,Sort sort,Class<T> tClass);
     /**
-     * 根据DTO中有值的自动查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param dtoClass
+     * 根据 entity 查询 list
      */
-    public <T> List<T> findByDTO(T dto, Class<T> dtoClass);
-    /**
-     * 根据DTO中有值的字段查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param dtoClass
-     * @param <T>
-     */
-    <T> List<T> findByInitDTO(D dto, Class<T> dtoClass, boolean accurateQuery);
-    /**
-     * 根据DTO中有值的自动查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param dtoClass
-     * @param accurateQuery 是否精确查找
-     */
-    public <T> List<T> findByDTO(T dto, Class<T> dtoClass, boolean accurateQuery);
-    /**
-     * 根据DTO中有值的字段进行查询并排序
-     * @param dto
-     * @param sort
-     * @return List<D>
-     */
-    public List<D> findByDTO(D dto, Sort sort);
-    /**
-     * 根据DTO中有值的字段进行查询并排序
-     * @param dto
-     * @param sort
-     * @param accurateQuery 是否精确查找
-     * @return List<D>
-     */
-    public List<D> findByDTO(D dto, Sort sort, boolean accurateQuery);
-    /**
-     * 根据DTO中有值的字段查询并排序，并将结果转换为指定类型DTO
-     * @param dto
-     * @param sort
-     * @param dtoClass
-     * @return List<T>
-     */
-    public <T> List<T> findByDTO(T dto, Sort sort, Class<T> dtoClass);
-    /**
-     * 根据DTO中有值的字段查询并排序，并将结果转换为指定类型DTO
-     * @param dto
-     * @param sort
-     * @param dtoClass
-     * @param accurateQuery 是否精确查找
-     */
-    public <T> List<T> findByDTO(T dto, Sort sort, Class<T> dtoClass, boolean accurateQuery);
-    /**
-     * 根据DTO中有值的字段查询，并将结果转换为DTO
-     * @param dto
-     * @param pageable
-     * @return Page<D>
-     */
-    Page<D> findByDTO(D dto, Pageable pageable);
+    public List<E> findListByEntity(E entity,Sort sort);
 
     /**
-     * 根据DTO中有值的字段查询，并将结果转换为DTO
-     * @param dto
-     * @param pageable
-     * @param accurateQuery 是否精确查找
-     * @return Page<D>
+     * 分页 entity
      */
-    public Page<D> findByDTO(D dto, Pageable pageable, boolean accurateQuery);
-    /**
-     * 根据DTO中有值的字段查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param pageable
-     * @param dtoClass
-     * @return Page<T>
-     */
-    public <T> Page<T> findByInitDTO(D dto, Pageable pageable, Class<T> dtoClass);
-    /**
-     * 根据DTO中有值的字段查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param pageable
-     * @param dtoClass
-     * @return Page<T>
-     */
-    public <T> Page<T> findByDTO(T dto, Pageable pageable, Class<T> dtoClass);
-    /**
-     * 根据DTO中有值的字段查询，并将结果转换为指定类型DTO
-     * @param dto
-     * @param pageable
-     * @param dtoClass
-     * @param accurateQuery 是否精确查找
-     * @return
-     */
-    public <T> Page<T> findByDTO(T dto, Pageable pageable, Class<T> dtoClass, boolean accurateQuery);
-    /**
-     * 保存实体类至数据库
-     * @param entity
-     * @return
-     */
-    @Transactional
-    public E save(E entity);
-    /**
-     * 根据DTO保存至数据库
-     * @param dto
-     * @return
-     */
-    @Transactional
-    public D saveByDTO(D dto);
-    /**
-     * 根据指定DTO保存至数据库
-     * @param dto
-     * @return
-     */
-    public <T> T saveByDTO(T dto, Class<T> dtoClass);
-    /**
-     * 批量保存实体类至数据库
-     * @param list
-     * @return
-     */
-    @Transactional
-    public List<E> save(List<E> list);
-    /**
-     * 批量保存DTO至数据库
-     * @param list
-     * @return
-     */
-    @Transactional
-    public List<D> saveByDTO(List<D> list);
-    /**
-     * 批量保存指定DTO至数据库
-     * @param list
-     * @param dtoClass
-     * @return
-     */
-    public <T> List<T> saveByDTO(List<T> list, Class<T> dtoClass);
+    public  Page<E> findPageByEntity(E entity, Pageable pageable);
+
 
     /**
-     * 更新实体至数据库
-     * @param entity
-     * @return
+     * 分页 DTO
      */
-    public Integer update(E entity);
+    public  Page<D> findPageByDTO(D dto, Pageable pageable);
     /**
-     * 由DTO更新实体至数据库
-     * @param dto
-     * @return
+     * 分页 DTO
      */
-    @Transactional
-    public Integer updateByDTO(D dto);
+    public  <T>Page<T> findPageByDTO(D dto, Pageable pageable,Class<T> tClass);
     /**
-     * 由指定DTO更新实体至数据库
-     * @param dto
-     * @param dtoClass
-     */
-    public <T> Integer updateByDTO(T dto, Class<T> dtoClass);
-    /**
-     * 由DTO List批量更新实体至数据库
-     * @param list
-     */
-    @Transactional
-    public Integer updateByDTO(List<D> list);
-    /**
-     * 由指定DTO List批量更新实体至数据库
-     * @param list
-     * @param dtoClass
-     */
-    public <T> Integer updateByDTO(List<T> list, Class<T> dtoClass);
-    /**
-     * 根据实体删除相应数据
-     */
-    @Transactional
-    public Integer delete(D dto);
-    /**
-     * 根据实体批量删除相应数据
-     * @param list
-     */
-    @Transactional
-    public Integer delete(List<D> list);
-    /**
-     * 根据数据ID删除相应数据
-     * @param id
-     * @return
-     */
-    @Transactional
-    public Integer delete(String id);
-    /**
-     * 根据数据ID批量删除相应数据
-     * @param ids
-     * @return
-     */
-    @Transactional
-    public Integer deleteByIdArray(String[] ids);
-    /**
-     * 根据数据ID批量删除相应数据
-     * @param list
-     * @return
-     */
-    @Transactional
-    public Integer deleteByIdList(List<String> list);
-    /**
-     * DTO转Entity
-     * @param dto
-     * @return
-     */
-    public E getEntity(D dto);
-    /**
-     * 指定类型DTO转Entity
-     * @param dto
-     * @param dtoClasss
-     * @return
-     */
-    public <T> E getEntityBySourceDTO(T dto);
-    /**
-     * DTO list转Entity list
-     * @param dtoList
-     * @return
-     */
-    public List<E> getEntityList(List<D> dtoList);
-    /**
-     * 指定类型DTO list转Entity list
-     * @param dtoList
-     * @param dtoClass
-     * @return
-     */
-    public <T> List<E> getEntityListBySourceDTO(List<T> dtoList);
-    /**
-     * Entity转DTO
-     * @param entity
-     * @return
+     * 实体类转成 DTO
      */
     public D getDTO(E entity);
+
     /**
-     * Entity转指定类型DTO
-     * @param entity
-     * @param dtoClass
+     * 实体类转成 目标类型
      */
-    public <T> T getDTO(E entity, Class<T> dtoClass);
+    public <T>T getTargetObject(E entity,Class<T> tClass);
+
     /**
-     * Entity List 转 DTO list
-     * @param entityList
-     * @return
+     * 实体类list 转 DTO list
      */
     public List<D> getDTOList(List<E> entityList);
     /**
-     * Entity List 转指定类型 DTO List
-     * @param entityList
-     * @param dtoClass
+     * 实体类list 转 DTO list
      */
-    public <T> List<T> getDTOList(List<E> entityList, Class<T> dtoClass);
+    public <T>List<T> getDTOList(List<E> entityList,Class<T> tClass);
+
     /**
-     * Entity Page转DTO Page
-     * @param page
-     * @return
+     * 实体类Page 转 DTO Page
      */
-    public Page<D> getDTOPage(Page<E> page, Pageable pageable);
+    public Page<D> getDTOPage(Page<E> entityPage);
     /**
-     * 获取指定DTO类型的Page
-     * @param page
-     * @param pageable
-     * @param dtoClass
+     * 实体类Page 转 DTO Page
      */
-    public <T> Page<T> getDTOPage(Page<E> page, Pageable pageable, Class<T> dtoClass);
+    public <T>Page<T> getDTOPage(Page<E> entityPage,Class<T> tClass);
+
 
 }
 
