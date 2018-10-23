@@ -146,5 +146,17 @@ public interface CommonService<E, D> {
      * 删除DTOLsit
      */
     public Integer delectByDTOList(List<D> entityList);
+
+    /**
+     * 根据 ids 删除
+     */
+    public Integer delectByIdList(List<Serializable> ids);
+
+    /**
+     * 根据id 删除
+     * @param id
+     * @return
+     */
+    public Integer delectById(Serializable id);
 }
 

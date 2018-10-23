@@ -181,4 +181,14 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     public Integer delectByDTOList(List<D> entityList) {
         return null;
     }
+
+    @Override
+    public Integer delectByIdList(List<Serializable> ids) {
+        return null;
+    }
+
+    @Override
+    public Integer delectById(Serializable id) {
+        return null;
+    }
 }
