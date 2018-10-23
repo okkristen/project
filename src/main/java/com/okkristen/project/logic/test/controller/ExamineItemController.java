@@ -1,5 +1,6 @@
 package com.okkristen.project.logic.test.controller;
 
+import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.logic.test.dto.ExamineItemDTO;
 import com.okkristen.project.logic.test.service.ExamineItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,14 @@ public class ExamineItemController {
      * @return
      */
     @PostMapping("/findAll")
-    public void findAll(@RequestBody ExamineItemDTO examineItemDTO) {
+    public AjaxResult findAll(@RequestBody ExamineItemDTO examineItemDTO) {
         if (examineItemDTO == null) {
             examineItemDTO = new ExamineItemDTO();
         }
+        examineItemDTO.setGrade("ceceee");
         List<ExamineItemDTO> list = examineItemService.findByDTO(examineItemDTO);
         System.out.println(list);
-        //        return AjaxResult.createSuccessResult(list);
+        return AjaxResult.createSuccessResult(list);
     }
 
 //    /**

@@ -16,9 +16,7 @@ public class MySpecsUtil {
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-
-                System.out.println("测试");
-                return null;
+                return MyPrediceUtil.getPredicate(root,criteriaQuery,criteriaBuilder,example);
             }
         };
     }
