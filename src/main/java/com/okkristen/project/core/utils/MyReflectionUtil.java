@@ -10,6 +10,7 @@ import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 public class MyReflectionUtil extends ReflectionUtils {
@@ -167,7 +168,13 @@ public class MyReflectionUtil extends ReflectionUtils {
         classes.add(Long.class);
         return !classes.contains(clazz);
     }
-
+    /**
+     * 获取当前类的的泛型
+     */
+    public  <T>Class<T> getParameterizedType(Class<T> tClass) {
+        return  null;
+//        Class<D> dc = (Class<D>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    }
 //    object.getClass().isPrimitive() ||
 //				object instanceof Boolean ||
 //				object instanceof String ||

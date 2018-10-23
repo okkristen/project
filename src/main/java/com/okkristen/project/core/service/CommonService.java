@@ -94,6 +94,57 @@ public interface CommonService<E, D> {
      */
     public <T>Page<T> getDTOPage(Page<E> entityPage,Class<T> tClass);
 
+    /******************************更新修改 删除数据****************************************/
+    /**
+     * 添加 数据 entity
+     */
+    public E saveByEntity(E entity);
+    /**
+     * 添加 数据 entity
+     */
+    public D saveByDTO(D dto);
+    /**
+     * 添加 entity list
+     */
+    public List<E> saveByEntityList(List<E> entityList);
+    /**
+     * 添加 DTO list
+     */
+    public List<D> saveByDTOList(List<D> entityList);
+    /**
+     * 修改  entity
+     */
+    public E updateByEntity(E entity);
+    /**
+     * 修改  Dto
+     */
+    public D updateByDTO(D entity);
+    /**
+     * 修改 entityList
+     */
+    public List<E> updateEntityList(List<E> entityList);
 
+    /**
+     * 修改 entityList
+     */
+    public List<D> updateDTOList(List<D> dtoList);
+    /**
+     * 删除 entity
+     */
+    public Integer delectByEntity(E entity);
+    /**
+     * 删除DTO
+     */
+    public Integer delectByDTO(D dto);
+
+    /**
+     * 删除entityList
+     */
+    public Integer delectByEntityList(List<E> entityList);
+
+    /**
+     * 删除DTOLsit
+     */
+    public Integer delectByDTOList(List<D> entityList);
 }
 

@@ -121,4 +121,64 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     public <T> Page<T> getDTOPage(Page<E> entityPage, Class<T> tClass) {
         return null;
     }
+
+    @Override
+    public E saveByEntity(E entity) {
+        return null;
+    }
+
+    @Override
+    public D saveByDTO(D dto) {
+        return null;
+    }
+
+    @Override
+    public List<E> saveByEntityList(List<E> entityList) {
+        return null;
+    }
+
+    @Override
+    public List<D> saveByDTOList(List<D> entityList) {
+        return null;
+    }
+
+    @Override
+    public E updateByEntity(E entity) {
+        return null;
+    }
+
+    @Override
+    public D updateByDTO(D entity) {
+        return null;
+    }
+
+    @Override
+    public List<E> updateEntityList(List<E> entityList) {
+        return null;
+    }
+
+    @Override
+    public List<D> updateDTOList(List<D> dtoList) {
+        return null;
+    }
+
+    @Override
+    public Integer delectByEntity(E entity) {
+        return null;
+    }
+
+    @Override
+    public Integer delectByDTO(D dto) {
+        return null;
+    }
+
+    @Override
+    public Integer delectByEntityList(List<E> entityList) {
+        return null;
+    }
+
+    @Override
+    public Integer delectByDTOList(List<D> entityList) {
+        return null;
+    }
 }
