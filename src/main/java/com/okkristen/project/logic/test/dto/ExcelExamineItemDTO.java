@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @create 2018年6月5日
  */
 public class ExcelExamineItemDTO implements Serializable {
-
+//
 //    private static final long serialVersionUID = -8750860697302001778L;
 //
 //    private String id;

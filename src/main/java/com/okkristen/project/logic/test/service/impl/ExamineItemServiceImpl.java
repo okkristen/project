@@ -22,6 +22,6 @@ public class ExamineItemServiceImpl extends CommonServiceImpl<ExamineItem, Exami
     private ExamineItemRepository examineItemRepository;
     @Override
     public List<String> findDistinctByGroupName(String type){
-      return  null; //examineItemRepository.findDistinctByGroupName(type);
+      return  examineItemRepository.findDistinctByGroupName(type);
     }
 }

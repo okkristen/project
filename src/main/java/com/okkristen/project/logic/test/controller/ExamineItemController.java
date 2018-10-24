@@ -1,15 +1,22 @@
 package com.okkristen.project.logic.test.controller;
 
 import com.okkristen.project.core.msg.AjaxResult;
+import com.okkristen.project.core.utils.MyBeanUtil;
+import com.okkristen.project.core.utils.MyReflectionUtil;
+import com.okkristen.project.logic.test.dto.ExamineDistrictDTO;
+import com.okkristen.project.logic.test.dto.ExamineGradeDTO;
 import com.okkristen.project.logic.test.dto.ExamineItemDTO;
-import com.okkristen.project.logic.test.service.ExamineItemService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.okkristen.project.logic.test.dto.ExamineStreetDTO;
+import com.okkristen.project.logic.test.entity.ExamineDistrict;
+import com.okkristen.project.logic.test.entity.ExamineGrade;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * 考核项信息
@@ -21,26 +28,37 @@ import java.util.List;
 @RequestMapping("/api/examine/examineItem")
 public class ExamineItemController {
 
-    @Autowired
-    private ExamineItemService examineItemService;
-
-    /**
-     * 查询列表
-     *
-     * @param examineItemDTO
-     * @return
-     */
-//    @PostMapping("/findAll")
-//    public AjaxResult findAll(@RequestBody ExamineItemDTO examineItemDTO) {
-//        if (examineItemDTO == null) {
-//            examineItemDTO = new ExamineItemDTO();
-//        }
-//        examineItemDTO.setGrade("ceceee");
-//        List<ExamineItemDTO> list = examineItemService.findByDTO(examineItemDTO);
-//        System.out.println(list);
-//        return AjaxResult.createSuccessResult(list);
-//    }
-
+//    @Autowired
+//    private ExamineItemService examineItemService;
+//
+//    /**
+//     * 查询列表
+//     *
+//     * @param examineItemDTO
+//     * @return
+//     */
+    @PostMapping("/findAll")
+    public AjaxResult findAll(@RequestBody ExamineItemDTO examineItemDTO) {
+        if (examineItemDTO == null) {
+            examineItemDTO = new ExamineItemDTO();
+        }
+        ExamineGradeDTO gradeDTO = new ExamineGradeDTO();
+        gradeDTO.setCreateTime(new Date());
+        gradeDTO.setEnable(true);
+        ExamineDistrictDTO examineDistrict  = new ExamineDistrictDTO();
+        ExamineStreetDTO streetDTO = new ExamineStreetDTO();
+        streetDTO.setRemark("streetDTO");
+        streetDTO.setScore(2222);
+        examineDistrict.setExamineStreet(streetDTO);
+        examineDistrict.setRiverLengthUnit("ExamineDistrict");
+        gradeDTO.setExamineDistrict(examineDistrict);
+        examineItemDTO.setGrade("");
+        gradeDTO.setExamineItem(examineItemDTO);
+        ExamineGrade grade = new ExamineGrade();
+        MyBeanUtil.copyObjectProperties(gradeDTO,grade);
+        return AjaxResult.createSuccessResult(grade);
+    }
+//
 //    /**
 //     * 分页查询
 //     *

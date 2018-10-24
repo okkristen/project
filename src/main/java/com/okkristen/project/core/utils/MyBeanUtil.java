@@ -2,9 +2,11 @@ package com.okkristen.project.core.utils;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,33 +18,42 @@ import java.util.List;
  * bean 工具类
  */
 public class MyBeanUtil extends BeanUtils {
-//    /**
-//     * 两个对象 相互复制
-//     * @param source
-//     * @param target
-//     */
-//    public static void  copyProperties(Object source,Object target) {
-//        Assert.isTrue(source != null, "来源对象不能为空");
-//        Assert.isTrue(target != null, "目标对象不能为空");
-//        List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getNotNullPropertyDescriptor(source.getClass(),source);
-//        // 获取到 source 的 属性值 不为null的 属性
-//        for (PropertyDescriptor propertyDescriptor : propertyDescriptorList) {
-//            // 来源类型的 读取 method
-//            Method sourceMethod = propertyDescriptor.getReadMethod();
-//            Object sourceValue = MyReflectionUtil.invokeMethod(sourceMethod, source);
-//
-//            // 由于 来源与目标的 属性名一致  则 方法名也一致 故 直接用
-//            String targetMethodName = propertyDescriptor.getWriteMethod().getName();
-//            // 设置到 目标对象
-//            Object targetValue =  MyReflectionUtil.invokeMethodParam(target, targetMethodName,sourceValue);
-//            //
-//            System.out.println(targetValue);
-//
-//
-//
-//
-//
-//
-//        }
-//    }
+
+
+    /**
+     * 两个对象相互的限制
+     * @param source 来源对象
+     * @param target 目标对象
+     */
+    public  static  void  copyObjectProperties(Object source, Object target) {
+        Assert.isTrue(source != null, "来源对象不能为空");
+        Assert.isTrue(target != null, "目标对象不能为空");
+        try {
+            copyProperties(source,target);
+            List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getPropertyDescriptor(target.getClass(),MyReflectionUtil.getFileds(target.getClass(),new ArrayList<>()));
+            // 目标对象 的属性描述器 list
+            for (PropertyDescriptor pd: propertyDescriptorList) {
+                Class<?> tClass = pd.getPropertyType();
+                // 排除 空字符串的情况
+                if (tClass.equals(String.class)) {
+                    Method readMethod = pd.getReadMethod();
+                    String getString = (String)MyReflectionUtil.invokeMethod(source,pd.getReadMethod().getName());
+                    getString = StringUtils.isEmpty(getString) ? null: getString;
+                    Method writeMethod = pd.getWriteMethod();
+                    writeMethod.invoke(target,getString);
+                    // 排除基本数字类型
+                } else if (MyReflectionUtil.isLgnore(tClass)) {
+                    Method readMethod = pd.getReadMethod();
+                    Object getObject = MyReflectionUtil.invokeMethod(source,pd.getReadMethod().getName());
+                    if (getObject != null) {
+                        Object setObject = pd.getPropertyType().newInstance();
+                        copyObjectProperties(getObject,setObject);
+                        Method writeMethod = pd.getWriteMethod();
+                        writeMethod.invoke(target,setObject);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
 }

@@ -14,6 +14,6 @@ import java.util.List;
  */
 public interface ExamineItemRepository extends MyRepository<ExamineItem, String> {
 
-//    @Query(value = "SELECT DISTINCT(group_name) FROM examine_item WHERE examine_type = ?1",nativeQuery = true)
-//    List<String> findDistinctByGroupName(String examineType);
+    @Query(value = "SELECT DISTINCT(group_name) FROM examine_item WHERE examine_type = ?1",nativeQuery = true)
+    List<String> findDistinctByGroupName(String examineType);
 }

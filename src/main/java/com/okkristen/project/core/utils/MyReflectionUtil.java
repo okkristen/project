@@ -11,6 +11,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class MyReflectionUtil extends ReflectionUtils {
@@ -84,7 +85,8 @@ public class MyReflectionUtil extends ReflectionUtils {
                 PropertyDescriptor pd = new PropertyDescriptor(field.getName(),clazz);
                 list.add(pd);
             } catch (IntrospectionException e) {
-                e.printStackTrace();
+                System.out.println("对象没有相对应的方法");
+//                e.printStackTrace();
             }
         }
         return list;
@@ -165,7 +167,19 @@ public class MyReflectionUtil extends ReflectionUtils {
      */
     public static  Boolean isLgnore(Class clazz){
         List<Class> classes = new ArrayList<>();
+        // 基本数据类型 的包装类 以及包装类
+//        classes.add(String.class);
+        classes.add(Integer.class);
+        classes.add(Boolean.class);
+        classes.add(Float.class);
+        classes.add(Byte.class);
+        classes.add(Short.class);
+        classes.add(Character.class);
+        classes.add(Double.class);
         classes.add(Long.class);
+//      忽略类型
+        classes.add(Date.class);
+        classes.add(BigDecimal.class);
         return !classes.contains(clazz);
     }
     /**

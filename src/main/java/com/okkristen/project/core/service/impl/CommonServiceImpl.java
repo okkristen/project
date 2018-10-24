@@ -163,32 +163,32 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
-    public Integer delectByEntity(E entity) {
+    public Integer deleteByEntity(E entity) {
         return null;
     }
 
     @Override
-    public Integer delectByDTO(D dto) {
+    public Integer deleteByDTO(D dto) {
         return null;
     }
 
     @Override
-    public Integer delectByEntityList(List<E> entityList) {
+    public Integer deleteByEntityList(List<E> entityList) {
         return null;
     }
 
     @Override
-    public Integer delectByDTOList(List<D> entityList) {
+    public Integer deleteByDTOList(List<D> entityList) {
         return null;
     }
 
     @Override
-    public Integer delectByIdList(List<Serializable> ids) {
+    public Integer deleteByIdList(List<Serializable> ids) {
         return null;
     }
 
     @Override
-    public Integer delectById(Serializable id) {
+    public Integer deleteById(Serializable id) {
         return null;
     }
 }

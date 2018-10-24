@@ -131,32 +131,32 @@ public interface CommonService<E, D> {
     /**
      * 删除 entity
      */
-    public Integer delectByEntity(E entity);
+    public Integer deleteByEntity(E entity);
     /**
      * 删除DTO
      */
-    public Integer delectByDTO(D dto);
+    public Integer deleteByDTO(D dto);
 
     /**
      * 删除entityList
      */
-    public Integer delectByEntityList(List<E> entityList);
+    public Integer deleteByEntityList(List<E> entityList);
 
     /**
      * 删除DTOLsit
      */
-    public Integer delectByDTOList(List<D> entityList);
+    public Integer deleteByDTOList(List<D> entityList);
 
     /**
      * 根据 ids 删除
      */
-    public Integer delectByIdList(List<Serializable> ids);
+    public Integer deleteByIdList(List<Serializable> ids);
 
     /**
      * 根据id 删除
      * @param id
      * @return
      */
-    public Integer delectById(Serializable id);
+    public Integer deleteById(Serializable id);
 }
 
