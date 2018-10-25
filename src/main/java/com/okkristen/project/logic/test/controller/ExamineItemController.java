@@ -9,6 +9,9 @@ import com.okkristen.project.logic.test.dto.ExamineItemDTO;
 import com.okkristen.project.logic.test.dto.ExamineStreetDTO;
 import com.okkristen.project.logic.test.entity.ExamineDistrict;
 import com.okkristen.project.logic.test.entity.ExamineGrade;
+import com.okkristen.project.logic.test.entity.ExamineItem;
+import com.okkristen.project.logic.test.service.ExamineItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +31,8 @@ import java.util.Date;
 @RequestMapping("/api/examine/examineItem")
 public class ExamineItemController {
 
-//    @Autowired
-//    private ExamineItemService examineItemService;
+    @Autowired
+    private ExamineItemService examineItemService;
 //
 //    /**
 //     * 查询列表
@@ -42,20 +45,21 @@ public class ExamineItemController {
         if (examineItemDTO == null) {
             examineItemDTO = new ExamineItemDTO();
         }
-        ExamineGradeDTO gradeDTO = new ExamineGradeDTO();
-        gradeDTO.setCreateTime(new Date());
-        gradeDTO.setEnable(true);
-        ExamineDistrictDTO examineDistrict  = new ExamineDistrictDTO();
-        ExamineStreetDTO streetDTO = new ExamineStreetDTO();
-        streetDTO.setRemark("streetDTO");
-        streetDTO.setScore(2222);
-        examineDistrict.setExamineStreet(streetDTO);
-        examineDistrict.setRiverLengthUnit("ExamineDistrict");
-        gradeDTO.setExamineDistrict(examineDistrict);
-        examineItemDTO.setGrade("");
-        gradeDTO.setExamineItem(examineItemDTO);
-        ExamineGrade grade = new ExamineGrade();
-        MyBeanUtil.copyObjectProperties(gradeDTO,grade);
+        ExamineItem grade = examineItemService.findById("2");
+//        ExamineGradeDTO gradeDTO = new ExamineGradeDTO();
+//        gradeDTO.setCreateTime(new Date());
+//        gradeDTO.setEnable(true);
+//        ExamineDistrictDTO examineDistrict  = new ExamineDistrictDTO();
+//        ExamineStreetDTO streetDTO = new ExamineStreetDTO();
+//        streetDTO.setRemark("streetDTO");
+//        streetDTO.setScore(2222);
+//        examineDistrict.setExamineStreet(streetDTO);
+//        examineDistrict.setRiverLengthUnit("ExamineDistrict");
+//        gradeDTO.setExamineDistrict(examineDistrict);
+//        examineItemDTO.setGrade("");
+//        gradeDTO.setExamineItem(examineItemDTO);
+//        ExamineGrade grade = new ExamineGrade();
+//        MyBeanUtil.copyObjectProperties(gradeDTO,grade);
         return AjaxResult.createSuccessResult(grade);
     }
 //

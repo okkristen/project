@@ -16,16 +16,17 @@ public interface CommonService<E, D> {
     /**
      * 根据id 查询 实体类
      */
-    public E findById(Serializable id);
+    public E findById(String id);
     /**
      * 根据id 查询DTO
      */
-    public D findDTOById(Serializable id);
+    public D findDTOById(String id);
 
     /**
      *根据传类型  返回相对应的类型
      */
-    public <T>T findDTOById(Serializable id,Class<T> tClass);
+    public <T>T findDTOById(String id,Class<T> tClass);
+
     /**
      * 根据 dto 查询 list
      */
@@ -74,8 +75,25 @@ public interface CommonService<E, D> {
     /**
      * 实体类转成 目标类型
      */
-    public <T>T getTargetObject(E entity,Class<T> tClass);
+    public <T>T getTargetDTO(E entity,Class<T> tClass);
+    /**
+     * DTO类转成 实体类类型
+     */
+    public E getSourceEntity(D dto);
 
+    /**
+     *  DTO list 转成实体类 L
+     */
+    public  List<E> getSourceEntityList(List<D> dtoList);
+    /**
+     *传入任意与实体类相关联的DTO  获取 原始的实体类
+     * @return
+     */
+    public <T>E getoriginalEntity(T tDTO);
+    /**
+     *  DTO list 转成实体类 L
+     */
+    public  <T>List<E> getoriginalEntityList(List<T> dtoList);
     /**
      * 实体类list 转 DTO list
      */
@@ -110,7 +128,7 @@ public interface CommonService<E, D> {
     /**
      * 添加 DTO list
      */
-    public List<D> saveByDTOList(List<D> entityList);
+    public List<D> saveByDTOList(List<D> dtoList);
     /**
      * 修改  entity
      */
@@ -150,13 +168,13 @@ public interface CommonService<E, D> {
     /**
      * 根据 ids 删除
      */
-    public Integer deleteByIdList(List<Serializable> ids);
+    public Integer deleteByIdList(List<String> ids);
 
     /**
      * 根据id 删除
      * @param id
      * @return
      */
-    public Integer deleteById(Serializable id);
+    public Integer deleteById(String id);
 }
 

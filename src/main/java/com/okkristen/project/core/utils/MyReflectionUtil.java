@@ -11,6 +11,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -183,12 +184,44 @@ public class MyReflectionUtil extends ReflectionUtils {
         return !classes.contains(clazz);
     }
     /**
-     * 获取当前类的的泛型
+     * 获取传入类的的泛型集合
      */
-    public  <T>Class<T> getParameterizedType(Class<T> tClass) {
-        return  null;
-//        Class<D> dc = (Class<D>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    public  static  <T>Type[] getParameterizedType(Class<T> tClass) {
+        Type[] types = ((ParameterizedType)tClass.getGenericSuperclass()).getActualTypeArguments();
+        return  types;
     }
+
+    /**
+     * 获取 实体类的对象
+     */
+    public static  <T>Object getEntityByServiceClass (Class<T> tClass) {
+        Type[] types = getParameterizedType(tClass);
+        try {
+            return  ((Class<T>) types[0]).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return  null;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return  null;
+        }
+    }
+    /**
+     * 获取 DTO类的对象
+     */
+    public static   <T>Object getDTOByServiceClass (Class<T> tClass) {
+        Type[] types = getParameterizedType(tClass);
+        try {
+            return  ((Class<T>) types[1]).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return  null;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return  null;
+        }
+    }
+
 //    object.getClass().isPrimitive() ||
 //				object instanceof Boolean ||
 //				object instanceof String ||
