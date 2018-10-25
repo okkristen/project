@@ -6,10 +6,7 @@ import org.springframework.util.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -21,15 +18,22 @@ import java.util.List;
  */
 public class MyBeanUtil extends BeanUtils {
 
+    public  static  void  copyObjectProperties(Object source, Object target) {
+        copyObjectProperties(source, target,new HashSet<>());
+    }
+
 
     /**
      * 两个对象相互的限制
      * @param source 来源对象
      * @param target 目标对象
      */
-    public  static  void  copyObjectProperties(Object source, Object target) {
+    public  static  void  copyObjectProperties(Object source, Object target,Set<Object> adressSet) {
         Assert.isTrue(source != null, "来源对象不能为空");
         Assert.isTrue(target != null, "目标对象不能为空");
+//        if (!adressSet.add(source)) {
+//            return;
+//        }
         try {
             copyProperties(source,target);
             List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getPropertyDescriptor(target.getClass(),MyReflectionUtil.getFileds(target.getClass(),new ArrayList<>()));
@@ -54,7 +58,7 @@ public class MyBeanUtil extends BeanUtils {
                            Object getObjectConent = i.next();
                            if (getObjectConent != null && checkObejectNull(getObjectConent)) {
                                Object setObjectConent = getObjectConent.getClass().newInstance();
-                               copyObjectProperties(getObjectConent,setObjectConent);
+                               copyObjectProperties(getObjectConent,setObjectConent,adressSet);
                                collection.add(setObjectConent);
                            }
                        }
@@ -65,7 +69,7 @@ public class MyBeanUtil extends BeanUtils {
                         // 处理该对象的内部是不是为空null 或者空字符串对象
                         if (getObject != null && checkObejectNull(getObject)) {
                             Object setObject = pd.getPropertyType().newInstance();
-                            copyObjectProperties(getObject,setObject);
+                            copyObjectProperties(getObject,setObject,adressSet);
                             Method writeMethod = pd.getWriteMethod();
                             writeMethod.invoke(target,setObject);
                         }

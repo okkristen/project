@@ -55,7 +55,8 @@ public class ExamineItemController {
         streetDTO.setScore(2222);
         ExamineGradeDTO gradeDTO1 = new ExamineGradeDTO();
         gradeDTO1.setExamineType(6666);
-        streetDTO.setExamineGradeList(Arrays.asList(gradeDTO));
+        gradeDTO1.setExamineGrade("");
+        streetDTO.setExamineGradeList(Arrays.asList(gradeDTO1));
         examineDistrict.setExamineStreet(streetDTO);
         examineDistrict.setRiverLengthUnit("ExamineDistrict");
         gradeDTO.setExamineDistrict(examineDistrict);
