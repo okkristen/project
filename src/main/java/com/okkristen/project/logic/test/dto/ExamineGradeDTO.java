@@ -1,10 +1,12 @@
 package com.okkristen.project.logic.test.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.okkristen.project.logic.test.entity.ExamineStreet;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 考核表信息DTO
@@ -77,6 +79,10 @@ public class ExamineGradeDTO implements Serializable {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    private List<String> strings;
+
+    private List<ExamineStreet> examineStreets;
+
     public String getId() {
         return id;
     }
@@ -118,9 +124,9 @@ public class ExamineGradeDTO implements Serializable {
     }
 
     public String getExamineGrade() {
-        if(StringUtils.isEmpty(examineGrade)) {
-            this.examineGrade = "0";
-        }
+//        if(StringUtils.isEmpty(examineGrade)) {
+//            this.examineGrade = "0";
+//        }
         return examineGrade;
     }
 
@@ -176,4 +182,20 @@ public class ExamineGradeDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
+
+    public List<String> getStrings() {
+        return strings;
+    }
+
+    public void setStrings(List<String> strings) {
+        this.strings = strings;
+    }
+
+    public List<ExamineStreet> getExamineStreets() {
+        return examineStreets;
+    }
+
+    public void setExamineStreets(List<ExamineStreet> examineStreets) {
+        this.examineStreets = examineStreets;
+    }
 }

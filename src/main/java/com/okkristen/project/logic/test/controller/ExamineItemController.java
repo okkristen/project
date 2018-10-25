@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -45,21 +46,23 @@ public class ExamineItemController {
         if (examineItemDTO == null) {
             examineItemDTO = new ExamineItemDTO();
         }
-        ExamineItem grade = examineItemService.findById("2");
-//        ExamineGradeDTO gradeDTO = new ExamineGradeDTO();
-//        gradeDTO.setCreateTime(new Date());
-//        gradeDTO.setEnable(true);
-//        ExamineDistrictDTO examineDistrict  = new ExamineDistrictDTO();
-//        ExamineStreetDTO streetDTO = new ExamineStreetDTO();
-//        streetDTO.setRemark("streetDTO");
-//        streetDTO.setScore(2222);
-//        examineDistrict.setExamineStreet(streetDTO);
-//        examineDistrict.setRiverLengthUnit("ExamineDistrict");
-//        gradeDTO.setExamineDistrict(examineDistrict);
-//        examineItemDTO.setGrade("");
-//        gradeDTO.setExamineItem(examineItemDTO);
-//        ExamineGrade grade = new ExamineGrade();
-//        MyBeanUtil.copyObjectProperties(gradeDTO,grade);
+        ExamineGradeDTO gradeDTO = new ExamineGradeDTO();
+        gradeDTO.setCreateTime(new Date());
+        gradeDTO.setEnable(true);
+        ExamineDistrictDTO examineDistrict  = new ExamineDistrictDTO();
+        ExamineStreetDTO streetDTO = new ExamineStreetDTO();
+        streetDTO.setRemark("streetDTO");
+        streetDTO.setScore(2222);
+        ExamineGradeDTO gradeDTO1 = new ExamineGradeDTO();
+        gradeDTO1.setExamineType(6666);
+        streetDTO.setExamineGradeList(Arrays.asList(gradeDTO));
+        examineDistrict.setExamineStreet(streetDTO);
+        examineDistrict.setRiverLengthUnit("ExamineDistrict");
+        gradeDTO.setExamineDistrict(examineDistrict);
+        examineItemDTO.setGrade("");
+        gradeDTO.setExamineItem(examineItemDTO);
+        ExamineGrade grade = new ExamineGrade();
+        MyBeanUtil.copyObjectProperties(gradeDTO,grade);
         return AjaxResult.createSuccessResult(grade);
     }
 //

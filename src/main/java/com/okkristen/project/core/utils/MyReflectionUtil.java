@@ -184,6 +184,27 @@ public class MyReflectionUtil extends ReflectionUtils {
         return !classes.contains(clazz);
     }
     /**
+     * 忽略字段 方法
+     * 返回真 不忽略  返回假 忽略
+     */
+    public static  Boolean isLgnore(Object isObject){
+        List<Class> classes = new ArrayList<>();
+        // 基本数据类型 的包装类 以及包装类
+       if (isObject.getClass().isPrimitive()
+                || isObject instanceof String
+                || isObject instanceof Integer
+                || isObject instanceof Float
+                || isObject instanceof Boolean
+                || isObject instanceof  Long
+                || isObject instanceof Double
+                || isObject instanceof Character
+                || isObject instanceof Byte
+                || isObject instanceof Short ) {
+           return  false;
+       }
+        return  true;
+    }
+    /**
      * 获取传入类的的泛型集合
      */
     public  static  <T>Type[] getParameterizedType(Class<T> tClass) {

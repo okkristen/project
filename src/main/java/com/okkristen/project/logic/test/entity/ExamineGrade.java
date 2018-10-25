@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 考核表信息
@@ -72,6 +73,7 @@ public class ExamineGrade extends BaseEntity implements Serializable {
      */
     @Column(columnDefinition = "bit(1) default true comment '是否启用'")
     private Boolean enable;
+
 
     public ExamineItem getExamineItem() {
         return examineItem;
