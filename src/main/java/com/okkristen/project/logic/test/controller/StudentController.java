@@ -8,6 +8,7 @@ import com.okkristen.project.logic.test.dto.TeatherDTO;
 import com.okkristen.project.logic.test.entity.Teather;
 import com.okkristen.project.logic.test.service.ExamineGradeService;
 import com.okkristen.project.logic.test.service.StudentService;
+import com.okkristen.project.logic.test.service.TeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +30,8 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private TeatherService teatherService;
     /**
      * 查询列表
      *
@@ -40,15 +44,28 @@ public class StudentController {
             studentDTO = new StudentDTO();
         }
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
-        studentDTO.setAge(11);
-        studentDTO.setName("杨");
-        studentDTO.setSex(BigDecimal.TEN);
+        studentDTO.setAge(1331);
+        studentDTO.setName("杨11111111111111111111");
+        studentDTO.setSex(BigDecimal.ZERO);
+//        studentDTO.setId("402881e766b01a1a0166b01bd1530000");
         TeatherDTO teather = new TeatherDTO();
-        teather.setId("1");
+        teather.setName("6666");
+        teather.setRemark("c测测测");
+        teather.setSex(BigDecimal.ZERO);
         studentDTO.setTeather(teather);
+        List<StudentDTO> list = new ArrayList<>();
+        list.add(studentDTO);
+        teather.setStudent(list);
+        teather = teatherService.saveByDTO(teather);
+
+//        studentService.updateByDTO(studentDTO);
+//        TeatherDTO teather = new TeatherDTO();
+//        teather.setId("1");
+//        studentDTO.setTeather(teather);
 //        studentDTO =  studentService.saveByDTO(studentDTO);
-        studentDTO =  studentService.findDTOById("8a8080a666af7ba40166af7bdde00000");
-        return AjaxResult.createSuccessResult(studentDTO);
+//        studentDTO =  studentService.findDTOById("8a8080a666af7ba40166af7bdde00000");
+//        TeatherDTO teatherDTO= teatherService.findDTOById("1");
+        return AjaxResult.createSuccessResult(teather);
     }
 //
 //    /**

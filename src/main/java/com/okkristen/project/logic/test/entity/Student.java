@@ -31,7 +31,7 @@ public class Student extends BaseEntity implements Serializable {
 
     private  BigDecimal sex;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Teather.class)
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = Teather.class)
     private Teather teather;
 
     public String getName() {

@@ -137,7 +137,7 @@ public interface CommonService<E, D> {
     /**
      * 修改  Dto
      */
-    public D updateByDTO(D entity);
+    public D updateByDTO(D dto);
     /**
      * 修改 entityList
      */

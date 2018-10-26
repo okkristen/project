@@ -45,7 +45,7 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
         };
         Set<Object> set = new TreeSet<Object>(com);
         set.add(target);
-        copyObjectProperties(source, target,true,set);
+        copyObjectProperties(source, target,false,set);
     }
 
     /**

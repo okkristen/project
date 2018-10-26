@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -227,8 +228,8 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
-    public D updateByDTO(D entity) {
-        return getDTO(updateByEntity(getSourceEntity(entity)));
+    public D updateByDTO(D dto) {
+        return getDTO(updateByEntity(getSourceEntity(dto)));
     }
 
     @Override
@@ -300,4 +301,25 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
             return 0;
         }
     }
+
+
+    /**
+     * 获取用户id
+     */
+    public String getObjectId(Object object) {
+        if (object != null) {
+            String id = (String)MyReflectionUtil.invokeMethod(object, "getId");
+            return id;
+        }
+        return "";
+    }
+    /**
+     * 查询 并且复制到目标对象
+     */
+    public E copyPer() {
+        return  null;
+    }
+
+
+
 }

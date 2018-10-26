@@ -181,6 +181,7 @@ public class MyReflectionUtil extends ReflectionUtils {
         classes.add(Long.class);
 //      忽略类型
         classes.add(Date.class);
+        classes.add(java.sql.Date.class);
         classes.add(BigDecimal.class);
         return !classes.contains(clazz);
     }
@@ -201,6 +202,8 @@ public class MyReflectionUtil extends ReflectionUtils {
                 || isObject instanceof Double
                 || isObject instanceof Character
                 || isObject instanceof Byte
+                || isObject instanceof java.sql.Date
+                || isObject instanceof  Date
 //               || isObject instanceof PersistentBag
                 || isObject instanceof Short ) {
            return  false;
