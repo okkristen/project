@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -22,6 +23,7 @@ import java.util.*;
  * @create 2016年11月17日
  * @param <E>
  */
+@Transactional
 public class CommonServiceImpl<E, D> implements CommonService<E, D> {
 
     @Autowired
@@ -45,6 +47,7 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public D findDTOById(String id) {
         E  entity = findById(id);
         if (entity == null) {
@@ -63,6 +66,7 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public List<D> findListByDTO(D dto) {
         List<E> entityList =  findListByEntity(getoriginalEntity(dto));
         return getDTOList(entityList);
@@ -114,18 +118,19 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public D getDTO(E entity) {
-        D dtoObeject = (D)MyReflectionUtil.getDTOByServiceClass(this.getClass());
-        MyBeanUtil.copyObjectProperties(entity,dtoObeject);
-        return dtoObeject;
+        D dtoObject = (D)MyReflectionUtil.getDTOByServiceClass(this.getClass());
+        MyBeanUtil.copyObjectProperties(entity,dtoObject);
+        return dtoObject;
     }
 
     @Override
     public <T> T getTargetDTO(E entity, Class<T> tClass) {
         try {
-            T tObeject = tClass.newInstance();
-            MyBeanUtil.copyObjectProperties(entity,tObeject);
-            return tObeject;
+            T tObject = tClass.newInstance();
+            MyBeanUtil.copyObjectProperties(entity,tObject);
+            return tObject;
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -138,7 +143,7 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     public  E getSourceEntity(D dto) {
         E entity = (E)MyReflectionUtil.getEntityByServiceClass(this.getClass());
         MyBeanUtil.copyObjectProperties(dto,entity);
-        return null;
+        return entity;
     }
     @Override
     public  List<E> getSourceEntityList(List<D> dtoList) {

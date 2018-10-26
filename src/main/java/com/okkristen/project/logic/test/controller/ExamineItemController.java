@@ -1,5 +1,6 @@
 package com.okkristen.project.logic.test.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.utils.MyBeanUtil;
 import com.okkristen.project.core.utils.MyReflectionUtil;
@@ -11,6 +12,7 @@ import com.okkristen.project.logic.test.entity.ExamineDistrict;
 import com.okkristen.project.logic.test.entity.ExamineGrade;
 import com.okkristen.project.logic.test.entity.ExamineItem;
 import com.okkristen.project.logic.test.service.ExamineItemService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,14 +58,17 @@ public class ExamineItemController {
         ExamineGradeDTO gradeDTO1 = new ExamineGradeDTO();
         gradeDTO1.setExamineType(6666);
         gradeDTO1.setExamineGrade("");
-        streetDTO.setExamineGradeList(Arrays.asList(gradeDTO1));
+        streetDTO.setExamineGradeList(Arrays.asList(gradeDTO));
         examineDistrict.setExamineStreet(streetDTO);
         examineDistrict.setRiverLengthUnit("ExamineDistrict");
         gradeDTO.setExamineDistrict(examineDistrict);
         examineItemDTO.setGrade("");
         gradeDTO.setExamineItem(examineItemDTO);
         ExamineGrade grade = new ExamineGrade();
+        System.out.println(JSONObject.toJSONString(gradeDTO));
         MyBeanUtil.copyObjectProperties(gradeDTO,grade);
+//        BeanUtils.copyProperties(gradeDTO,grade);
+//        MyBeanUtil.copyJsonObjectProperties(gradeDTO,grade);
         return AjaxResult.createSuccessResult(grade);
     }
 //

@@ -1,11 +1,21 @@
 package com.okkristen.project.core.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.logic.test.entity.ExamineItem;
+import org.hibernate.LazyInitializationException;
+import org.hibernate.TransientObjectException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 
@@ -16,25 +26,132 @@ import java.util.*;
 /**
  * bean 工具类
  */
-public class MyBeanUtil extends BeanUtils {
+public class MyBeanUtil extends org.springframework.beans.BeanUtils {
 
+//    public static void copyProperties(Object source, Object target) {
+//        checkObejectNull(source);
+//        checkObejectNull(target);
+//        BeanUtils.copyProperties(source, target);
+//    }
     public  static  void  copyObjectProperties(Object source, Object target) {
-        copyObjectProperties(source, target,new HashSet<>());
+//        copyObjectProperties(source, target,new HashMap<>(), false);
+        checkObejectNull(source);
+//        copyObjectProperties(source, target,new HashMap<>(), false);
+        Comparator<Object> com = new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                return o1.getClass().equals(o2.getClass()) ? 0 : -1;
+            }
+        };
+        Set<Object> set = new TreeSet<Object>(com);
+        set.add(target);
+        copyObjectProperties(source, target,true,set);
+    }
+
+    /**
+     *
+     * @param source
+     * @param target
+     * @param isFlag 返回页面为ture 返回数据库 为 false
+     * @param objects
+     */
+    public static void  copyObjectProperties(Object source, Object target,Boolean isFlag,Set<Object> objects) {
+        Assert.isTrue(source != null, "来源对象不能为空");
+        Assert.isTrue(target != null, "目标对象不能为空");
+       try {
+            // 获取 目标对象的属性描述器
+            List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getPropertyDescriptor(target.getClass(),MyReflectionUtil.getFileds(target.getClass(),new ArrayList<>()));
+            // 循环目标用户的对象
+            for (PropertyDescriptor pd: propertyDescriptorList) {
+                // 获取 属性类型
+                Class<?> tClass = pd.getPropertyType();
+                // get 方法名
+                String readMethodName = pd.getReadMethod().getName();
+                // 从 来源对象中 获取 数据类型
+                Object getObject = null;
+                try {
+                    getObject = MyReflectionUtil.invokeMethod(source,readMethodName);
+                } catch (TransientObjectException e) {
+                    continue;
+                }
+                if (getObject == null) {
+                    continue;
+                }
+                Method write = pd.getWriteMethod();
+                // 设置对象属性为 String 类型的
+                if (!MyReflectionUtil.isLgnore(getObject)) {
+                    try {
+                        write.invoke(target,getObject);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                } else if (getObject instanceof  Collection) {
+                    Collection setCollection = new ArrayList();
+                    if (!objects.contains(setCollection)) {
+                        objects.add(setCollection);
+                        Collection getCollection = (Collection) getObject;
+                        Iterator iterator = getCollection.iterator();
+                        while (iterator.hasNext()) {
+                            Object getListContent = iterator.next();
+                            Object setListContent = getParameterizedTypeListype(pd);
+                            copyObjectProperties(getListContent,setListContent,isFlag,objects);
+                            setCollection.add(setListContent);
+                        }
+                    } else {
+                        if (isFlag) {
+                            setCollection = null;
+                        } else {
+                            List<Object> list = new  ArrayList<>(objects);
+                            setCollection =(Collection)list.get(list.indexOf(getObject));
+                        }
+                    }
+                    try {
+                        write.invoke(target, setCollection);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+    //                用户自定义类型获取
+                } else {
+                    if (checkObejectNull(getObject)) {
+                        Object setObject = pd.getPropertyType().newInstance();
+                        if (!objects.contains(setObject)) {
+                            objects.add(setObject);
+                            copyObjectProperties(getObject,setObject,isFlag,objects);
+                        } else {
+                            if (isFlag) {
+                                setObject = null;
+                            } else {
+                                List<Object> list = new  ArrayList<>(objects);
+                                setObject =list.get(list.indexOf(getObject));
+                            }
+                        }
+                        Method writeMethod = pd.getWriteMethod();
+                        writeMethod.invoke(target,setObject);
+                    }
+                }
+            }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
     }
 
 
+
     /**
-     * 两个对象相互的限制
      * @param source 来源对象
      * @param target 目标对象
+     * @param adressMap 保存用户自定义类型
+     * @param isLgnoreCustom 是否忽略自定义类型
      */
-    public  static  void  copyObjectProperties(Object source, Object target,Set<Object> adressSet) {
+    public  static  void  copyObjectProperties(Object source, Object target,HashMap<Object,Object> adressMap,Boolean isLgnoreCustom) {
         Assert.isTrue(source != null, "来源对象不能为空");
         Assert.isTrue(target != null, "目标对象不能为空");
-//        if (!adressSet.add(source)) {
-//            return;
-//        }
         try {
+            // 普通类型全部复制
             copyProperties(source,target);
             List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getPropertyDescriptor(target.getClass(),MyReflectionUtil.getFileds(target.getClass(),new ArrayList<>()));
             // 目标对象 的属性描述器 list
@@ -42,7 +159,7 @@ public class MyBeanUtil extends BeanUtils {
                 Class<?> tClass = pd.getPropertyType();
                 Method readMethod = pd.getReadMethod();
                 Object getObject = MyReflectionUtil.invokeMethod(source,pd.getReadMethod().getName());
-                if (getObject != null) {
+                if (getObject != null && checkObejectNull(getObject)) {
                     // 排除 空字符串的情况
                     if (getObject instanceof  String) {
                         String getString = (String)getObject;
@@ -57,8 +174,13 @@ public class MyBeanUtil extends BeanUtils {
                        while (i.hasNext()) {
                            Object getObjectConent = i.next();
                            if (getObjectConent != null && checkObejectNull(getObjectConent)) {
-                               Object setObjectConent = getObjectConent.getClass().newInstance();
-                               copyObjectProperties(getObjectConent,setObjectConent,adressSet);
+                               Object setObjectConent =  getParameterizedTypeListype(pd);
+                               if (setObjectConent == null) {
+                                   continue;
+                               }
+                               if (checkObejectNull(getObject)) {
+                                   copyObjectProperties(getObjectConent,setObjectConent,adressMap,false);
+                               }
                                collection.add(setObjectConent);
                            }
                        }
@@ -69,7 +191,9 @@ public class MyBeanUtil extends BeanUtils {
                         // 处理该对象的内部是不是为空null 或者空字符串对象
                         if (getObject != null && checkObejectNull(getObject)) {
                             Object setObject = pd.getPropertyType().newInstance();
-                            copyObjectProperties(getObject,setObject,adressSet);
+                            if (checkObejectNull(getObject)) {
+                                copyObjectProperties(getObject, setObject, adressMap, false);
+                            }
                             Method writeMethod = pd.getWriteMethod();
                             writeMethod.invoke(target,setObject);
                         }
@@ -88,19 +212,29 @@ public class MyBeanUtil extends BeanUtils {
         if (getObject == null) {
             return  false;
         }
-        System.out.println(getObject);
+//        System.out.println(getObject);
         List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getPropertyDescriptor(getObject.getClass(),MyReflectionUtil.getFileds(getObject.getClass(),new ArrayList<>()));
         Boolean flag = false;
         for (PropertyDescriptor pd : propertyDescriptorList) {
             Method readMethod = pd.getReadMethod();
-            Object getValue = MyReflectionUtil.invokeMethod(readMethod,getObject);
+            Object getValue = null;
+            try {
+                getValue = MyReflectionUtil.invokeMethod(readMethod,getObject);
+            } catch (TransientObjectException e) {
+                continue;
+            }
+            if (getValue == null || getValue instanceof Collection) {
+                continue;
+            }
             if (String.class.equals(pd.getPropertyType())) {
                 if (!StringUtils.isEmpty(getValue)) {
                     return true;
+                } else {
+                    dealObejectNull(getObject, null,pd);
                 }
             } else {
-                // 如果是里面的 类型直接判断 是否为null 即可
-                if (!MyReflectionUtil.isLgnore(pd.getPropertyType())) {
+                // 如果是忽略里面的 类型直接判断 是否为null 即可
+                if (!MyReflectionUtil.isLgnore(pd.getPropertyType()) || !MyReflectionUtil.isLgnore(getValue)) {
                     if (getValue != null) {
                         return  true;
                     }
@@ -108,11 +242,47 @@ public class MyBeanUtil extends BeanUtils {
                     if (checkObejectNull(getValue)) {
                         return true;
                     } else {
+                        dealObejectNull(getObject, null, pd);
                         flag = false;
                     }
                 }
             }
         }
         return  flag;
+    }
+    public static  void dealObejectNull(Object dealObject,Object dealValue, PropertyDescriptor pd) {
+       Method write =  pd.getWriteMethod();
+       if (write == null) {
+           return;
+       }
+        try {
+            write.invoke(dealObject,dealValue);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 利用 JSON 来复制一部分信息
+     */
+    public  static  <T>T  copyJsonObjectProperties(Object source, T target) {
+       String sourceString = JSONObject.toJSONString(source);
+       return  JSONObject.parseObject(sourceString, (Class<T>) target.getClass());
+    }
+
+    /**
+     * 利用属性描述器 来获取list 里面的 类型
+     */
+    public static Object getParameterizedTypeListype (PropertyDescriptor pd) {
+        Type[] types = ((ParameterizedType)pd.getReadMethod().getGenericReturnType()).getActualTypeArguments();
+        try {
+            return  ((Class)types[0]).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return  null;
     }
 }

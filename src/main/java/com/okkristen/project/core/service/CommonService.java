@@ -3,8 +3,8 @@ package com.okkristen.project.core.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,6 +12,7 @@ import java.util.List;
  * 通用Service
  * 定义了通用的接口方法定义
  */
+@Transactional
 public interface CommonService<E, D> {
     /**
      * 根据id 查询 实体类

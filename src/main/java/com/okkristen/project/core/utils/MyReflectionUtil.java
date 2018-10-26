@@ -1,6 +1,7 @@
 package com.okkristen.project.core.utils;
 
 import ch.qos.logback.classic.turbo.TurboFilter;
+import org.hibernate.collection.internal.PersistentBag;
 import org.springframework.beans.CachedIntrospectionResults;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -192,6 +193,7 @@ public class MyReflectionUtil extends ReflectionUtils {
         // 基本数据类型 的包装类 以及包装类
        if (isObject.getClass().isPrimitive()
                 || isObject instanceof String
+                || isObject instanceof BigDecimal
                 || isObject instanceof Integer
                 || isObject instanceof Float
                 || isObject instanceof Boolean
@@ -199,6 +201,7 @@ public class MyReflectionUtil extends ReflectionUtils {
                 || isObject instanceof Double
                 || isObject instanceof Character
                 || isObject instanceof Byte
+//               || isObject instanceof PersistentBag
                 || isObject instanceof Short ) {
            return  false;
        }
@@ -243,17 +246,4 @@ public class MyReflectionUtil extends ReflectionUtils {
         }
     }
 
-//    object.getClass().isPrimitive() ||
-//				object instanceof Boolean ||
-//				object instanceof String ||
-//				object instanceof Double ||
-//				object instanceof Float ||
-//				object instanceof Integer ||
-//				object instanceof Long ||
-//                object instanceof BigDecimal ||
-//				object instanceof Date ||
-//				object instanceof java.sql.Date ||
-//				object instanceof Timestamp ||
-//				object instanceof Time ||
-//				object instanceof PersistentBag
 }
