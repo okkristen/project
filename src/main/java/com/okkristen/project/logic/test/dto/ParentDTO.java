@@ -2,17 +2,16 @@ package com.okkristen.project.logic.test.dto;
 
 import com.okkristen.project.common.dto.BaseDTO;
 import com.okkristen.project.common.entity.BaseEntity;
-import com.okkristen.project.logic.test.entity.Parent;
-import com.okkristen.project.logic.test.entity.Teather;
+import com.okkristen.project.logic.test.entity.Student;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 区级考核项信息
@@ -20,16 +19,14 @@ import java.util.List;
  * @author zpy
  * @create 2018/5/4
  */
-public class StudentDTO  extends BaseDTO implements Serializable {
+public class ParentDTO extends BaseDTO implements Serializable {
     private  String name;
 
     private  Integer age;
 
     private BigDecimal sex;
 
-    private TeatherDTO teather;
-
-    private List<ParentDTO> parents;
+    private StudentDTO student;
 
     public String getName() {
         return name;
@@ -55,19 +52,11 @@ public class StudentDTO  extends BaseDTO implements Serializable {
         this.sex = sex;
     }
 
-    public TeatherDTO getTeather() {
-        return teather;
+    public StudentDTO getStudent() {
+        return student;
     }
 
-    public void setTeather(TeatherDTO teather) {
-        this.teather = teather;
-    }
-
-    public List<ParentDTO> getParents() {
-        return parents;
-    }
-
-    public void setParents(List<ParentDTO> parents) {
-        this.parents = parents;
+    public void setStudent(StudentDTO student) {
+        this.student = student;
     }
 }

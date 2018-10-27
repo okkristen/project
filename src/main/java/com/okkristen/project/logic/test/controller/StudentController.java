@@ -2,7 +2,9 @@ package com.okkristen.project.logic.test.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
+import com.okkristen.project.core.service.MyBeanUtils;
 import com.okkristen.project.logic.test.dto.ExamineGradeDTO;
+import com.okkristen.project.logic.test.dto.ParentDTO;
 import com.okkristen.project.logic.test.dto.StudentDTO;
 import com.okkristen.project.logic.test.dto.TeatherDTO;
 import com.okkristen.project.logic.test.entity.Teather;
@@ -44,28 +46,35 @@ public class StudentController {
             studentDTO = new StudentDTO();
         }
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
-        studentDTO.setAge(1331);
-        studentDTO.setName("杨11111111111111111111");
-        studentDTO.setSex(BigDecimal.ZERO);
-//        studentDTO.setId("402881e766b01a1a0166b01bd1530000");
-        TeatherDTO teather = new TeatherDTO();
-        teather.setName("6666");
-        teather.setRemark("c测测测");
-        teather.setSex(BigDecimal.ZERO);
-        studentDTO.setTeather(teather);
-        List<StudentDTO> list = new ArrayList<>();
-        list.add(studentDTO);
-        teather.setStudent(list);
-        teather = teatherService.saveByDTO(teather);
+        Long start = System.currentTimeMillis();
+        List<Object> list1 = new ArrayList<>();
+        for (int i = 0; i < 10000 ; i++) {
+            ParentDTO parentDTO = new ParentDTO();
+            parentDTO.setName("parnent");
+            parentDTO.setAge(55555);
+            parentDTO.setStudent(studentDTO);
+            List<ParentDTO> parentDTOS = new ArrayList<>();
+            parentDTOS.add(parentDTO);
+            studentDTO.setParents(parentDTOS);
+            studentDTO.setAge(1331);
+            studentDTO.setName("杨jing");
+            studentDTO.setSex(BigDecimal.ZERO);
+            TeatherDTO teather = new TeatherDTO();
+            teather.setName("6666");
+            teather.setRemark("c测测测");
+            teather.setSex(BigDecimal.ZERO);
+            studentDTO.setTeather(teather);
+            List<StudentDTO> list = new ArrayList<>();
+            list.add(studentDTO);
+            teather.setStudent(list);
+            Teather teather1 = new Teather();
+                MyBeanUtils.copyProperties(teather,teather1);
+//            Teather teather1 = JSONObject.parseObject(JSONObject.toJSONString(teather),Teather.class);
+            list1.add(teather1);
+        }
 
-//        studentService.updateByDTO(studentDTO);
-//        TeatherDTO teather = new TeatherDTO();
-//        teather.setId("1");
-//        studentDTO.setTeather(teather);
-//        studentDTO =  studentService.saveByDTO(studentDTO);
-//        studentDTO =  studentService.findDTOById("8a8080a666af7ba40166af7bdde00000");
-//        TeatherDTO teatherDTO= teatherService.findDTOById("1");
-        return AjaxResult.createSuccessResult(teather);
+        System.out.println("时间" + (System.currentTimeMillis() - start));
+        return AjaxResult.createSuccessResult(System.currentTimeMillis() - start);
     }
 //
 //    /**

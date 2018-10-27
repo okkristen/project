@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 区级考核项信息
@@ -33,6 +34,9 @@ public class Student extends BaseEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY,targetEntity = Teather.class)
     private Teather teather;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "student")
+    private List<Parent> parents;
 
     public String getName() {
         return name;
@@ -64,5 +68,13 @@ public class Student extends BaseEntity implements Serializable {
 
     public void setTeather(Teather teather) {
         this.teather = teather;
+    }
+
+    public List<Parent> getParents() {
+        return parents;
+    }
+
+    public void setParents(List<Parent> parents) {
+        this.parents = parents;
     }
 }

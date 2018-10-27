@@ -37,15 +37,16 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
 //        copyObjectProperties(source, target,new HashMap<>(), false);
         checkObejectNull(source);
 //        copyObjectProperties(source, target,new HashMap<>(), false);
-        Comparator<Object> com = new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                return o1.getClass().equals(o2.getClass()) ? 0 : -1;
-            }
-        };
-        Set<Object> set = new TreeSet<Object>(com);
-        set.add(target);
-        copyObjectProperties(source, target,false,set);
+//        Comparator<Object> com = new Comparator<Object>() {
+//            @Override
+//            public int compare(Object o1, Object o2) {
+//                return o1.getClass().equals(o2.getClass()) ? 0 : -1;
+//            }
+//        };
+//        Set<Object> set = new HashSet<Object>();
+        Map<Object,Object> map = new HashMap();
+//        set.add(target);
+        copyObjectProperties(source, target,false,map);
     }
 
     /**
@@ -55,7 +56,7 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
      * @param isFlag 返回页面为ture 返回数据库 为 false
      * @param objects
      */
-    public static void  copyObjectProperties(Object source, Object target,Boolean isFlag,Set<Object> objects) {
+    public static void  copyObjectProperties(Object source, Object target,Boolean isFlag,Map<Object,Object> objects) {
         Assert.isTrue(source != null, "来源对象不能为空");
         Assert.isTrue(target != null, "目标对象不能为空");
        try {
@@ -89,8 +90,14 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
                     }
                 } else if (getObject instanceof  Collection) {
                     Collection setCollection = new ArrayList();
-                    if (!objects.contains(setCollection)) {
-                        objects.add(setCollection);
+                    // 集合里的对象
+                    Object objectInList = getParameterizedTypeListype(pd);
+                    Collection setInObject =(Collection)objects.get(objectInList.getClass());
+                    if (setInObject != null) {
+                        setCollection = setInObject;
+                    }
+                    if (!objects.containsKey(objectInList.getClass())) {
+                        objects.put(objectInList.getClass(),setCollection);
                         Collection getCollection = (Collection) getObject;
                         Iterator iterator = getCollection.iterator();
                         while (iterator.hasNext()) {
@@ -102,9 +109,6 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
                     } else {
                         if (isFlag) {
                             setCollection = null;
-                        } else {
-                            List<Object> list = new  ArrayList<>(objects);
-                            setCollection =(Collection)list.get(list.indexOf(getObject));
                         }
                     }
                     try {
@@ -118,15 +122,16 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
                 } else {
                     if (checkObejectNull(getObject)) {
                         Object setObject = pd.getPropertyType().newInstance();
-                        if (!objects.contains(setObject)) {
-                            objects.add(setObject);
+                        Object setInObject = objects.get(setObject.getClass());
+                        if (setInObject != null) {
+                            setObject = setInObject;
+                        }
+                        if (!objects.containsKey(setObject.getClass())) {
+                            objects.put(setObject.getClass(), setObject);
                             copyObjectProperties(getObject,setObject,isFlag,objects);
                         } else {
                             if (isFlag) {
                                 setObject = null;
-                            } else {
-                                List<Object> list = new  ArrayList<>(objects);
-                                setObject =list.get(list.indexOf(getObject));
                             }
                         }
                         Method writeMethod = pd.getWriteMethod();
@@ -282,6 +287,20 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+        return  null;
+    }
+
+    /**
+     * 获取Set中 相对应的 对象
+     */
+    private static Object getObjectInSet(Set<Object> objects, Object object){
+        Iterator<Object> iterator = objects.iterator();
+        while (iterator.hasNext()) {
+            Object o = iterator.next();
+            if (o.getClass().equals(object.getClass())) {
+                return  o;
+            }
         }
         return  null;
     }

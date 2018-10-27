@@ -117,18 +117,22 @@ public interface CommonService<E, D> {
     /**
      * 添加 数据 entity
      */
+    @Transactional
     public E saveByEntity(E entity);
     /**
      * 添加 数据 entity
      */
+    @Transactional
     public D saveByDTO(D dto);
     /**
      * 添加 entity list
      */
+    @Transactional
     public List<E> saveByEntityList(List<E> entityList);
     /**
      * 添加 DTO list
      */
+    @Transactional
     public List<D> saveByDTOList(List<D> dtoList);
     /**
      * 修改  entity
