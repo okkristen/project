@@ -249,4 +249,15 @@ public class MyReflectionUtil extends ReflectionUtils {
         }
     }
 
+    /**
+     *  获取List 里面的数据类型
+     * @param tClass
+     * @param <T>
+     * @return
+     */
+    public  static  <T>Object getListInType (Class<T> tClass) {
+        // 由于查看list 里面的对象 和 普通service 对象泛型 代码一致
+       return getEntityByServiceClass(tClass);
+    }
+
 }

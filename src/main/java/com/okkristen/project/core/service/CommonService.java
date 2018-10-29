@@ -90,11 +90,11 @@ public interface CommonService<E, D> {
      *传入任意与实体类相关联的DTO  获取 原始的实体类
      * @return
      */
-    public <T>E getoriginalEntity(T tDTO);
+    public <T>E getOriginalEntity(T tDTO);
     /**
      *  DTO list 转成实体类 L
      */
-    public  <T>List<E> getoriginalEntityList(List<T> dtoList);
+    public  <T>List<E> getOriginalEntityList(List<T> dtoList);
     /**
      * 实体类list 转 DTO list
      */

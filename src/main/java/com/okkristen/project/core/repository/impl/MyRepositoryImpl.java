@@ -2,6 +2,7 @@ package com.okkristen.project.core.repository.impl;
 
 import com.okkristen.project.core.repository.MyRepository;
 import com.okkristen.project.core.repository.utils.MySpecsUtil;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -34,7 +35,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(pageable);
         }
-        return null;
+        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example),pageable);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll();
         }
-        return null;
+        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(sort);
         }
-        return null;
+        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example),sort);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(sort);
         }
-        return null;
+        return findByEntity(example,sort);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(pageable);
         }
-        return null;
+        return findByEntity(example,pageable);
     }
 
 }

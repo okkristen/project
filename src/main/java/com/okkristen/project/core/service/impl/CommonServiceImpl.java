@@ -68,13 +68,13 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     @Override
     @Transactional
     public List<D> findListByDTO(D dto) {
-        List<E> entityList =  findListByEntity(getoriginalEntity(dto));
+        List<E> entityList =  findListByEntity(getOriginalEntity(dto));
         return getDTOList(entityList);
     }
 
     @Override
     public <T> List<T> findListByDTO(D dto, Class<T> tClass) {
-        List<E> entityList = findListByEntity(getoriginalEntity(dto));
+        List<E> entityList = findListByEntity(getOriginalEntity(dto));
         return getDTOList(entityList,tClass);
     }
 
@@ -85,13 +85,13 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
 
     @Override
     public List<D> findListByDTO(D dto, Sort sort) {
-        List<E> enitity = findListByEntity(getoriginalEntity(dto),sort);
+        List<E> enitity = findListByEntity(getOriginalEntity(dto),sort);
         return getDTOList(enitity);
     }
 
     @Override
     public <T> List<T> findListByDTO(D dto, Sort sort, Class<T> tClass) {
-        List<E> enitity = findListByEntity(getoriginalEntity(dto),sort);
+        List<E> enitity = findListByEntity(getOriginalEntity(dto),sort);
         return getDTOList(enitity,tClass);
     }
 
@@ -107,13 +107,13 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
 
     @Override
     public Page<D> findPageByDTO(D dto, Pageable pageable) {
-        Page<E> entityPage = findPageByEntity(getoriginalEntity(dto),pageable);
+        Page<E> entityPage = findPageByEntity(getOriginalEntity(dto),pageable);
         return getDTOPage(entityPage);
     }
 
     @Override
     public <T> Page<T> findPageByDTO(D dto, Pageable pageable, Class<T> tClass) {
-        Page<E> entityPage = findPageByEntity(getoriginalEntity(dto),pageable);
+        Page<E> entityPage = findPageByEntity(getOriginalEntity(dto),pageable);
         return getDTOPage(entityPage,tClass);
     }
 
@@ -157,17 +157,17 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
         return entityList;
     }
     @Override
-    public <T> E getoriginalEntity(T tDTO) {
+    public <T> E getOriginalEntity(T tDTO) {
         E entity = (E)MyReflectionUtil.getEntityByServiceClass(this.getClass());
-        MyBeanUtil.copyObjectProperties(tDTO,entity);
-        return null;
+//        MyBeanUtil.copyObjectProperties(tDTO,entity);
+        return (E) MyBeanUtil.copyJsonObjectProperties(tDTO,entity.getClass());
     }
 
     @Override
-    public <T> List<E> getoriginalEntityList(List<T> dtoList) {
+    public <T> List<E> getOriginalEntityList(List<T> dtoList) {
         List<E> entityList = new ArrayList<>();
         for (T dto: dtoList) {
-            E entity = getoriginalEntity(dto);
+            E entity = getOriginalEntity(dto);
             entityList.add(entity);
         }
         return entityList;
@@ -175,6 +175,9 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     @Override
     public List<D> getDTOList(List<E> entityList) {
         List<D> dtoList = new ArrayList<>();
+        if (entityList == null || entityList.isEmpty()) {
+            return  dtoList;
+        }
         for (E entity: entityList) {
             dtoList.add(getDTO(entity));
         }

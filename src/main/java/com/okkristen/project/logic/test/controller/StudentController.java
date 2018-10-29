@@ -3,9 +3,11 @@ package com.okkristen.project.logic.test.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.logic.test.dto.ParentDTO;
+import com.okkristen.project.logic.test.dto.QueryEntityDTO;
 import com.okkristen.project.logic.test.dto.StudentDTO;
 import com.okkristen.project.logic.test.dto.TeatherDTO;
 import com.okkristen.project.logic.test.entity.Teather;
+import com.okkristen.project.logic.test.service.QueryEntityService;
 import com.okkristen.project.logic.test.service.StudentService;
 import com.okkristen.project.logic.test.service.TeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +34,9 @@ public class StudentController {
 
     @Autowired
     private TeatherService teatherService;
+
+    @Autowired
+    private QueryEntityService queryEntityService;
     /**
      * 查询列表
      *
@@ -45,7 +51,7 @@ public class StudentController {
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
         Long start = System.currentTimeMillis();
         List<TeatherDTO> list1 = new ArrayList<>();
-//        for (int i = 0; i < 10000 ; i++) {
+//        for (int i = 0; i < 3 ; i++) {
 //        studentDTO = new StudentDTO();
 //           ParentDTO parentDTO = new ParentDTO();
 //           parentDTO.setStudent(studentDTO);
@@ -72,9 +78,50 @@ public class StudentController {
 //        teatherDTO.setId("1");
 //        teatherService.updateByDTO(teatherDTO);
 //        teatherService.deleteById("1");
-        teatherService.deleteById("1");
-        System.out.println("时间" + (System.currentTimeMillis() - start));
-        return AjaxResult.createSuccessResult(System.currentTimeMillis() - start);
+//        teatherService.deleteById("1");
+//        查询
+//       studentDTO = new StudentDTO();
+//       ParentDTO parentDTO = new ParentDTO();
+//       parentDTO.setStudent(studentDTO);
+////       父母
+//       parentDTO.setName("parentDTOS.add(parentDTO)");
+//       parentDTO.setAge(11);
+//       parentDTO.setSex(BigDecimal.TEN);
+//       List<ParentDTO> list = new ArrayList<>();
+//       list.add(parentDTO);
+//       studentDTO.setParents(list);
+//       studentDTO.setSex(BigDecimal.ONE);
+////    学生
+//       studentDTO.setName("33");
+//       List<StudentDTO> dtoList  = new ArrayList<>();
+//       dtoList.add(studentDTO);
+//       TeatherDTO teatherDTO = new TeatherDTO();
+//       studentDTO.setTeather(teatherDTO);
+//       teatherDTO.setAge(222);
+//       teatherDTO.setName("教师");
+//       teatherDTO.setStudent(dtoList);
+//        JSONObject sourceJson = JSONObject.parseObject(JSONObject.toJSONString(teatherDTO));
+////        教师
+//        teatherDTO.setName("1");
+//        List<TeatherDTO> teatherDTOList = teatherService.findListByDTO(teatherDTO);
+//        System.out.println("时间" + (System.currentTimeMillis() - start));
+//        return AjaxResult.createSuccessResult(teatherDTOList);
+        QueryEntityDTO queryEntityDTO = new QueryEntityDTO();
+//        queryEntityDTO.setaByte(Byte.parseByte("111"));
+        // 小数
+//        queryEntityDTO.setaDouble(Double.parseDouble("123"));
+//        queryEntityDTO.setAge(Integer.valueOf(5));
+//        queryEntityDTO.setHappyTime(new Date());
+//         有问题
+        queryEntityDTO.setBool(Boolean.FALSE);
+//        queryEntityDTO.setMoney(BigDecimal.TEN);
+        // 查询 有小数
+        queryEntityDTO.setNum1(Float.valueOf("999"));
+//        queryEntityDTO.setLongId(Long.valueOf("958"));
+//        queryEntityDTO.setName("测试");
+//        queryEntityDTO =   queryEntityService.saveByDTO(queryEntityDTO);
+       List<QueryEntityDTO> queryEntityDTOs = queryEntityService.findListByDTO(queryEntityDTO);
+        return AjaxResult.createSuccessResult(queryEntityDTOs);
     }
 //
 //    /**

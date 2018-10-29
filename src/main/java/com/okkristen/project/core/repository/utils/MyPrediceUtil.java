@@ -1,13 +1,21 @@
 package com.okkristen.project.core.repository.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.common.entity.BaseEntity;
 import com.okkristen.project.core.utils.MyReflectionUtil;
+import org.hibernate.mapping.Collection;
+import org.hibernate.mapping.Value;
 
 import javax.persistence.criteria.*;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ysj
@@ -30,52 +38,101 @@ public class MyPrediceUtil {
         // 返回一个 最终的对象条件
 //        return  criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         // 获取不为null属性 并且不为字符串的属性的 属性
-       List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getNotNullPropertyDescriptor(example.getClass(),example);
-
-
-
-
-
-        return  null;
+//       List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getNotNullPropertyDescriptor(example.getClass(),example);
+       // 里面包含 这整个对象里面的 有值的信息
+       JSONObject exampleJson = JSONObject.parseObject(JSONObject.toJSONString(example));
+        // 把 类组成动态条件 查询出 复杂的 数据
+        List<Predicate> list = createPredicate(root,criteriaBuilder,exampleJson, (Class<T>) example.getClass(), null);
+        Predicate predicate = criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+        return  predicate;
     }
 
     /**
-     * 获取查询的path
+     * 生成动态查询条件
      * @param root
+     * @param exampleJson
+     * @param <T>
      * @return
      */
-    private  static <T>List<Path> getPaths(Root<T> root, final  T example) {
-        List<String> list = MyReflectionUtil.getFieldName(example);
-        Map<String,String> fieldType = MyReflectionUtil.getFiledType(example.getClass());
-        List<Path> paths = new ArrayList<>();
-        for(String name: list) {
-            if (MyReflectionUtil.isLgnoreFieldName(name) && MyReflectionUtil.isLgnore(fieldType.get(name))) {
-                Path path = root.get(name);
-                paths.add(path);
+    public  static  <T>List<Predicate> createPredicate (Root<T> root, CriteriaBuilder criteriaBuilder, JSONObject exampleJson, Class<T> tClass,Path path) {
+        Set<String> keySet = exampleJson.keySet();
+        List<Predicate> predicates = new ArrayList<>();
+        Path first = null;
+        if (path == null) {
+            first  = root;
+        } else {
+            first = path;
+        }
+//         三种类型
+        for (String key : keySet) {
+            System.out.println("key"  + key);
+            Object value = exampleJson.get(key);
+            System.out.println("value"  + value);
+            if (value instanceof JSONArray) {
+                JSONArray jsonArray = (JSONArray)value;
+//                if (!jsonArray.isEmpty()) {
+//                    JSONObject fisrt = jsonArray.getJSONObject(0);
+//                    Object valueObject = getTableName(tClass,key,value);
+//                    String tableName = getTableName(valueObject);
+//                    join = root.join(tableName, JoinType.LEFT);
+//                    List<Predicate> predicateList =  createPredicate(root,criteriaBuilder,fisrt,(Class<T>) valueObject.getClass(),join);
+//                    predicates.addAll(predicateList);
+//                }
+            } else if (!MyReflectionUtil.isLgnore(value)) {
+                predicates.add(criteriaBuilder.like(first.get(key).as(String.class), likeFomat(String.valueOf(value))));
+            } else if (value instanceof JSONObject) {
+//                JSONObject  jsonObject = (JSONObject)value;
+//                Object valueObject = getTableName(tClass,key,value);
+//                String tableName = getTableName(valueObject);
+//                join = root.join(tableName, JoinType.LEFT);
+//                List<Predicate> predicateList = createPredicate(root,criteriaBuilder,jsonObject,(Class<T>)valueObject.getClass(),join);
+//                predicates.addAll(predicateList);
             }
         }
-        return  paths;
+        return  predicates;
     }
+
     /**
-     *创建搜索条件
+     * like 查询 增加 前后%
+     * @param value
+     * @return
      */
-    private static <T>List<Predicate> getPredicate (List<Path> paths, CriteriaBuilder criteriaBuilder, final  T example) {
-        List<Predicate> list = new ArrayList<>();
-        for (Path path: paths) {
-            Predicate predicate = criteriaBuilder.like(path, "");
-            list.add(predicate);
-        }
-        return list;
+    public  static  String likeFomat(String value) {
+        return  "%" + value + "%";
     }
+
     /**
-     * 根据数据类型的不同  选择不同的 方法
+     * 跟据Class 对象 一级 属性对象 来获取 表链接对象
      */
-    private static  <T>Predicate getPredicate (Path path,T exmple, CriteriaBuilder criteriaBuilder ) {
-        List<Field> fields = MyReflectionUtil.getFileds(exmple.getClass(),new ArrayList<>());
-        for (Field field: fields) {
-            Object o = MyReflectionUtil.getFieldValue(field,exmple);
-            Object type = MyReflectionUtil.getFieldType(field);
+
+    public static <T>Object getTableName (Class<T> tClass,String attributeName, Object value) {
+        try {
+            T t = tClass.newInstance();
+            Field field = MyReflectionUtil.findField(tClass,attributeName);
+            if (value instanceof JSONArray) {
+                Class clazz = (Class) ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
+                return  clazz.newInstance();
+            } else if (value instanceof  JSONObject) {
+                Class clazz =  (Class)field.getGenericType();
+                return  clazz.newInstance();
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
         return  null;
+    }
+    public static String getTableName (Object value) {
+        String tableName = value.getClass().getName();
+        String className = tableName.substring(tableName.lastIndexOf(".") + 1);
+       return className.toLowerCase();
+    }
+    public static  String toLowerCaseFirstOne(String s){
+        if (Character.isLowerCase(s.charAt(0))) {
+            return s;
+        } else {
+            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+        }
     }
 }
