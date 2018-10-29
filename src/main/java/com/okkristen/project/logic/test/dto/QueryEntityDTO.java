@@ -1,6 +1,8 @@
 package com.okkristen.project.logic.test.dto;
 
 import com.okkristen.project.common.entity.BaseEntity;
+import com.okkristen.project.logic.test.entity.Parent;
+import com.okkristen.project.logic.test.entity.Student;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,6 +11,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ysj
@@ -33,6 +36,10 @@ public class QueryEntityDTO extends BaseEntity implements Serializable {
     private Double aDouble;
 
     private Byte aByte;
+
+    private StudentDTO student;
+
+    private List<ParentDTO> parentList;
 
     public String getName() {
         return name;
@@ -104,5 +111,21 @@ public class QueryEntityDTO extends BaseEntity implements Serializable {
 
     public void setaByte(Byte aByte) {
         this.aByte = aByte;
+    }
+
+    public StudentDTO getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentDTO student) {
+        this.student = student;
+    }
+
+    public List<ParentDTO> getParentList() {
+        return parentList;
+    }
+
+    public void setParentList(List<ParentDTO> parentList) {
+        this.parentList = parentList;
     }
 }

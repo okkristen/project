@@ -4,12 +4,11 @@ import com.okkristen.project.common.entity.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ysj
@@ -38,6 +37,11 @@ public class QueryEntity extends BaseEntity implements Serializable {
     private Double aDouble;
 
     private Byte aByte;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Student student;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
+    private List<Parent> parentList;
 
     public String getName() {
         return name;
@@ -109,5 +113,21 @@ public class QueryEntity extends BaseEntity implements Serializable {
 
     public void setaByte(Byte aByte) {
         this.aByte = aByte;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<Parent> getParentList() {
+        return parentList;
+    }
+
+    public void setParentList(List<Parent> parentList) {
+        this.parentList = parentList;
     }
 }

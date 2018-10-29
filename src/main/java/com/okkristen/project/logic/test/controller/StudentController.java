@@ -48,6 +48,8 @@ public class StudentController {
         if (studentDTO == null) {
             studentDTO = new StudentDTO();
         }
+//        studentDTO.setAge(1);
+        studentDTO.setName("杨2");
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
         Long start = System.currentTimeMillis();
         List<TeatherDTO> list1 = new ArrayList<>();
@@ -113,12 +115,21 @@ public class StudentController {
 //        queryEntityDTO.setAge(Integer.valueOf(5));
 //        queryEntityDTO.setHappyTime(new Date());
 //         有问题
-        queryEntityDTO.setBool(Boolean.FALSE);
+//        queryEntityDTO.setBool(Boolean.FALSE);
 //        queryEntityDTO.setMoney(BigDecimal.TEN);
-        // 查询 有小数
-        queryEntityDTO.setNum1(Float.valueOf("999"));
+//         查询 有小数
+//        queryEntityDTO.setNum1(Float.valueOf("999"));
+//        studentDTO.setId("402881e766b01a1a0166b01bd1530000");
+//        queryEntityDTO.setStudent(studentDTO);
 //        queryEntityDTO.setLongId(Long.valueOf("958"));
 //        queryEntityDTO.setName("测试");
+        List<ParentDTO> parentDTOS = new ArrayList<>();
+        ParentDTO parentDTO = new ParentDTO();
+//        parentDTO.setAge(11222);
+//        parentDTO.setSex(BigDecimal.valueOf(1));
+        parentDTO.setName("ccccccc");
+        parentDTOS.add(parentDTO);
+        queryEntityDTO.setParentList(parentDTOS);
 //        queryEntityDTO =   queryEntityService.saveByDTO(queryEntityDTO);
        List<QueryEntityDTO> queryEntityDTOs = queryEntityService.findListByDTO(queryEntityDTO);
         return AjaxResult.createSuccessResult(queryEntityDTOs);

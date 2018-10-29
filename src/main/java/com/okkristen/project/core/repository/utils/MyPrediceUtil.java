@@ -70,23 +70,23 @@ public class MyPrediceUtil {
             System.out.println("value"  + value);
             if (value instanceof JSONArray) {
                 JSONArray jsonArray = (JSONArray)value;
-//                if (!jsonArray.isEmpty()) {
-//                    JSONObject fisrt = jsonArray.getJSONObject(0);
-//                    Object valueObject = getTableName(tClass,key,value);
-//                    String tableName = getTableName(valueObject);
-//                    join = root.join(tableName, JoinType.LEFT);
-//                    List<Predicate> predicateList =  createPredicate(root,criteriaBuilder,fisrt,(Class<T>) valueObject.getClass(),join);
-//                    predicates.addAll(predicateList);
-//                }
+                if (!jsonArray.isEmpty()) {
+                    JSONObject fisrtObject = jsonArray.getJSONObject(0);
+                    Object valueObject = getTableName(tClass,key,value);
+                    String tableName = getTableName(valueObject);
+                    Path table = first.get(key);
+                    List<Predicate> predicateList =  createPredicate(root,criteriaBuilder,fisrtObject,(Class<T>) valueObject.getClass(),table);
+                    predicates.addAll(predicateList);
+                }
             } else if (!MyReflectionUtil.isLgnore(value)) {
                 predicates.add(criteriaBuilder.like(first.get(key).as(String.class), likeFomat(String.valueOf(value))));
             } else if (value instanceof JSONObject) {
-//                JSONObject  jsonObject = (JSONObject)value;
-//                Object valueObject = getTableName(tClass,key,value);
-//                String tableName = getTableName(valueObject);
-//                join = root.join(tableName, JoinType.LEFT);
-//                List<Predicate> predicateList = createPredicate(root,criteriaBuilder,jsonObject,(Class<T>)valueObject.getClass(),join);
-//                predicates.addAll(predicateList);
+                JSONObject  jsonObject = (JSONObject)value;
+                Object valueObject = getTableName(tClass,key,value);
+                String tableName = getTableName(valueObject);
+                Path table = root.join(tableName, JoinType.LEFT);
+                List<Predicate> predicateList = createPredicate(root,criteriaBuilder,jsonObject,(Class<T>)valueObject.getClass(),table);
+                predicates.addAll(predicateList);
             }
         }
         return  predicates;
@@ -126,13 +126,13 @@ public class MyPrediceUtil {
     public static String getTableName (Object value) {
         String tableName = value.getClass().getName();
         String className = tableName.substring(tableName.lastIndexOf(".") + 1);
-       return className.toLowerCase();
+       return new StringBuilder().append(className.substring(0,1).toLowerCase()).append(className.substring(1)).toString();
     }
-    public static  String toLowerCaseFirstOne(String s){
-        if (Character.isLowerCase(s.charAt(0))) {
-            return s;
-        } else {
-            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-        }
-    }
+//    public static  String toLowerCaseFirstOne(String s){
+//        if (Character.isLowerCase(s.charAt(0))) {
+//            return s;
+//        } else {
+//            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+//        }
+//    }
 }
