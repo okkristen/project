@@ -29,7 +29,6 @@ public class MyPrediceUtil {
 //        List<Predicate> predicates = getPredicate(paths,criteriaBuilder,example);
         // 返回一个 最终的对象条件
 //        return  criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-
         // 获取不为null属性 并且不为字符串的属性的 属性
        List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getNotNullPropertyDescriptor(example.getClass(),example);
 

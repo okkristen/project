@@ -24,7 +24,6 @@ import java.util.*;
  * @create 2016年11月17日
  * @param <E>
  */
-@Transactional
 public class CommonServiceImpl<E, D> implements CommonService<E, D> {
 
     @Autowired
@@ -122,29 +121,31 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     @Transactional
     public D getDTO(E entity) {
         D dtoObject = (D)MyReflectionUtil.getDTOByServiceClass(this.getClass());
-        MyBeanUtil.copyObjectProperties(entity,dtoObject);
-        return dtoObject;
+//        MyBeanUtil.copyObjectProperties(entity,dtoObject);
+//        dtoObject =(D)MyBeanUtil.copyJsonObjectProperties(entity,dtoObject.getClass());
+        return (D) getTargetDTO(entity,dtoObject.getClass());
     }
 
     @Override
     public <T> T getTargetDTO(E entity, Class<T> tClass) {
-        try {
-            T tObject = tClass.newInstance();
-            MyBeanUtil.copyObjectProperties(entity,tObject);
-            return tObject;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        try {
+//            T tObject = tClass.newInstance();
+//            MyBeanUtil.copyObjectProperties(entity,tObject);
+//            return tObject;
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+        return (T) MyBeanUtil.copyJsonObjectProperties(entity,tClass);
     }
 
     @Override
     public  E getSourceEntity(D dto) {
         E entity = (E)MyReflectionUtil.getEntityByServiceClass(this.getClass());
-        MyBeanUtil.copyObjectProperties(dto,entity);
-        return entity;
+//        MyBeanUtil.copyObjectProperties(dto,entity);
+//        return entity;
+        return (E) MyBeanUtil.copyJsonObjectProperties(dto,entity.getClass());
     }
     @Override
     public  List<E> getSourceEntityList(List<D> dtoList) {
@@ -213,17 +214,24 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public List<E> saveByEntityList(List<E> entityList) {
         return  myRepository.saveAll(entityList);
     }
 
     @Override
+    @Transactional
     public List<D> saveByDTOList(List<D> dtoList) {
         return getDTOList(saveByEntityList(getSourceEntityList(dtoList)));
     }
 
     @Override
     public E updateByEntity(E entity) {
+        // 查询原来的 合并传入的 修改成最新的额 getObjectId
+        String id = getObjectId(entity);
+        if (!StringUtils.isEmpty(id)) {
+            entity = (E)  MyBeanUtil.mergeJsonObjectProperties(entity, findById(id), entity.getClass());
+        }
         return myRepository.saveAndFlush(entity);
     }
 

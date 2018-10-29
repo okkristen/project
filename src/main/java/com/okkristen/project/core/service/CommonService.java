@@ -154,25 +154,30 @@ public interface CommonService<E, D> {
     /**
      * 删除 entity
      */
+    @Transactional
     public Integer deleteByEntity(E entity);
     /**
      * 删除DTO
      */
+    @Transactional
     public Integer deleteByDTO(D dto);
 
     /**
      * 删除entityList
      */
+    @Transactional
     public Integer deleteByEntityList(List<E> entityList);
 
     /**
      * 删除DTOLsit
      */
+    @Transactional
     public Integer deleteByDTOList(List<D> entityList);
 
     /**
      * 根据 ids 删除
      */
+    @Transactional
     public Integer deleteByIdList(List<String> ids);
 
     /**
@@ -180,6 +185,7 @@ public interface CommonService<E, D> {
      * @param id
      * @return
      */
+    @Transactional
     public Integer deleteById(String id);
 }
 

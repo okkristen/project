@@ -35,7 +35,7 @@ public class Student extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY,targetEntity = Teather.class)
     private Teather teather;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "student")
+    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true,mappedBy = "student")
     private List<Parent> parents;
 
     public String getName() {

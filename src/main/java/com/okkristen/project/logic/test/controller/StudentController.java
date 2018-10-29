@@ -2,13 +2,10 @@ package com.okkristen.project.logic.test.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
-import com.okkristen.project.core.service.MyBeanUtils;
-import com.okkristen.project.logic.test.dto.ExamineGradeDTO;
 import com.okkristen.project.logic.test.dto.ParentDTO;
 import com.okkristen.project.logic.test.dto.StudentDTO;
 import com.okkristen.project.logic.test.dto.TeatherDTO;
 import com.okkristen.project.logic.test.entity.Teather;
-import com.okkristen.project.logic.test.service.ExamineGradeService;
 import com.okkristen.project.logic.test.service.StudentService;
 import com.okkristen.project.logic.test.service.TeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,32 +44,35 @@ public class StudentController {
         }
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
         Long start = System.currentTimeMillis();
-        List<Object> list1 = new ArrayList<>();
-        for (int i = 0; i < 10000 ; i++) {
-            ParentDTO parentDTO = new ParentDTO();
-            parentDTO.setName("parnent");
-            parentDTO.setAge(55555);
-            parentDTO.setStudent(studentDTO);
-            List<ParentDTO> parentDTOS = new ArrayList<>();
-            parentDTOS.add(parentDTO);
-            studentDTO.setParents(parentDTOS);
-            studentDTO.setAge(1331);
-            studentDTO.setName("杨jing");
-            studentDTO.setSex(BigDecimal.ZERO);
-            TeatherDTO teather = new TeatherDTO();
-            teather.setName("6666");
-            teather.setRemark("c测测测");
-            teather.setSex(BigDecimal.ZERO);
-            studentDTO.setTeather(teather);
-            List<StudentDTO> list = new ArrayList<>();
-            list.add(studentDTO);
-            teather.setStudent(list);
-            Teather teather1 = new Teather();
-                MyBeanUtils.copyProperties(teather,teather1);
-//            Teather teather1 = JSONObject.parseObject(JSONObject.toJSONString(teather),Teather.class);
-            list1.add(teather1);
-        }
-
+        List<TeatherDTO> list1 = new ArrayList<>();
+//        for (int i = 0; i < 10000 ; i++) {
+//        studentDTO = new StudentDTO();
+//           ParentDTO parentDTO = new ParentDTO();
+//           parentDTO.setStudent(studentDTO);
+//           parentDTO.setName("parentDTOS.add(parentDTO)");
+//           parentDTO.setAge(11);
+//           parentDTO.setSex(BigDecimal.TEN);
+//           List<ParentDTO> list = new ArrayList<>();
+//           list.add(parentDTO);
+//           studentDTO.setParents(list);
+//           studentDTO.setSex(BigDecimal.ONE);
+//           studentDTO.setName("33");
+//           List<StudentDTO> dtoList  = new ArrayList<>();
+//           dtoList.add(studentDTO);
+//           TeatherDTO teatherDTO = new TeatherDTO();
+//           studentDTO.setTeather(teatherDTO);
+//           teatherDTO.setAge(222);
+//           teatherDTO.setName("教师");
+//           teatherDTO.setStudent(dtoList);
+//           list1.add(teatherDTO);
+//        }
+//        teatherService.saveByDTOList(list1);
+//        TeatherDTO teatherDTO = new TeatherDTO();
+//        teatherDTO.setName("测试1111");
+//        teatherDTO.setId("1");
+//        teatherService.updateByDTO(teatherDTO);
+//        teatherService.deleteById("1");
+        teatherService.deleteById("1");
         System.out.println("时间" + (System.currentTimeMillis() - start));
         return AjaxResult.createSuccessResult(System.currentTimeMillis() - start);
     }

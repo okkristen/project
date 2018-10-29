@@ -1,14 +1,7 @@
 package com.okkristen.project.logic.test.dto;
 
 import com.okkristen.project.common.dto.BaseDTO;
-import com.okkristen.project.common.entity.BaseEntity;
-import com.okkristen.project.logic.test.entity.Student;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;

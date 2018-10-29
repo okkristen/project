@@ -26,7 +26,7 @@ public class Teather extends BaseEntity implements Serializable {
 
     private BigDecimal sex;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "teather")
+    @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval =  true,mappedBy = "teather")
     private List<Student> student;
 
     public String getName() {

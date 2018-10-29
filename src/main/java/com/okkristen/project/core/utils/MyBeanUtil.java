@@ -277,6 +277,31 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
     }
 
     /**
+     * 利用 Fast JSON 来转换 实体与DTO 相互转换
+     * @param source
+     * @param tClass
+     * @param <T>
+     * @return
+     */
+    public  static  <T>T  copyJsonObjectProperties(Object source, Class<T> tClass) {
+        String sourceString = JSONObject.toJSONString(source);
+        return  JSONObject.parseObject(sourceString, tClass);
+    }
+
+    /**
+     * 合并对象
+     * @param source
+     * @param target
+     * @param <T>
+     * @return
+     */
+    public static <T>T mergeJsonObjectProperties(Object source,Object target, Class<T> tClass){
+        JSONObject targetJson = JSONObject.parseObject(JSONObject.toJSONString(target));
+        JSONObject sourceJson = JSONObject.parseObject(JSONObject.toJSONString(source));
+        targetJson.putAll(sourceJson);
+        return  JSONObject.parseObject(targetJson.toJSONString(),tClass);
+    }
+    /**
      * 利用属性描述器 来获取list 里面的 类型
      */
     public static Object getParameterizedTypeListype (PropertyDescriptor pd) {
