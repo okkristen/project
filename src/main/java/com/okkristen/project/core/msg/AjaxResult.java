@@ -1,5 +1,7 @@
 package com.okkristen.project.core.msg;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 
 /**
@@ -15,8 +17,13 @@ public class AjaxResult implements Serializable  {
 	/**
 	 * 数据类型
 	 */
-//	@JSONField(serialize=false)
+	@JSONField(serialize= false)
 	private MessageType type;
+	/**
+	 *类型编码
+	 */
+	private Integer typeCode;
+
 	/**
 	 * 信息代码
 	 */
@@ -29,7 +36,13 @@ public class AjaxResult implements Serializable  {
 	 * 附加消息
 	 */
 	private String message;
-	
+
+	/**
+	 * 错误编码
+	 */
+	private  Integer errCode;
+
+
 	/**
 	 * 
 	 */
@@ -48,6 +61,10 @@ public class AjaxResult implements Serializable  {
 		this.code = code;
 		this.data = data;
 		this.message = message;
+		if (code != null) {
+			this.errCode = code.getCode();
+		}
+		this.typeCode = type.getTypeCode();
 	}
 	/**
 	 * 创建请求成功的返回值
@@ -123,5 +140,20 @@ public class AjaxResult implements Serializable  {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
+	public Integer getTypeCode() {
+		return typeCode;
+	}
+
+	public void setTypeCode(Integer typeCode) {
+		this.typeCode = typeCode;
+	}
+
+	public Integer geterrCode() {
+		return errCode;
+	}
+
+	public void seterrCode(Integer errCode) {
+		this.errCode = errCode;
+	}
 }

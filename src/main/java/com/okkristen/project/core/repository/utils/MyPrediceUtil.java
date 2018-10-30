@@ -68,9 +68,9 @@ public class MyPrediceUtil {
         }
 //         三种类型
         for (String key : keySet) {
-            System.out.println("key"  + key);
+//            System.out.println("key"  + key);
             Object value = exampleJson.get(key);
-            System.out.println("value"  + value);
+//            System.out.println("value"  + value);
             // 查询时间 范围
             if (MyJsonUtil.ignoreMethod(key)) {
                 if (key.indexOf("start") == 0) {

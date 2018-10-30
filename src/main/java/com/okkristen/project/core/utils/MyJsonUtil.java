@@ -25,9 +25,9 @@ public class MyJsonUtil {
         PropertyFilter profilter = new PropertyFilter(){
             @Override
             public boolean apply(Object object, String name, Object value) {
-                System.out.println("object" + object);
-                System.out.println("name" + name);
-                System.out.println("value" + value);
+//                System.out.println("object" + object);
+//                System.out.println("name" + name);
+//                System.out.println("value" + value);
                 // 特殊要求字段名  直接 返回 不忽略
                 if (ignoreMethod(name)) {
                     return  true;
