@@ -4,14 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.common.entity.BaseEntity;
+import com.okkristen.project.core.utils.MyJsonUtil;
 import com.okkristen.project.core.utils.MyReflectionUtil;
 import org.hibernate.mapping.Collection;
 import org.hibernate.mapping.Value;
 
 import javax.persistence.criteria.*;
+import java.beans.Expression;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +43,7 @@ public class MyPrediceUtil {
         // 获取不为null属性 并且不为字符串的属性的 属性
 //       List<PropertyDescriptor> propertyDescriptorList =  MyReflectionUtil.getNotNullPropertyDescriptor(example.getClass(),example);
        // 里面包含 这整个对象里面的 有值的信息
-       JSONObject exampleJson = JSONObject.parseObject(JSONObject.toJSONString(example));
+       JSONObject exampleJson = JSONObject.parseObject(JSONObject.toJSONString(example, MyJsonUtil.getPropertyFilter()));
         // 把 类组成动态条件 查询出 复杂的 数据
         List<Predicate> list = createPredicate(root,criteriaBuilder,exampleJson, (Class<T>) example.getClass(), null);
         Predicate predicate = criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
@@ -68,25 +71,39 @@ public class MyPrediceUtil {
             System.out.println("key"  + key);
             Object value = exampleJson.get(key);
             System.out.println("value"  + value);
-            if (value instanceof JSONArray) {
-                JSONArray jsonArray = (JSONArray)value;
-                if (!jsonArray.isEmpty()) {
-                    JSONObject fisrtObject = jsonArray.getJSONObject(0);
+            // 查询时间 范围
+            if (MyJsonUtil.ignoreMethod(key)) {
+                if (key.indexOf("start") == 0) {
+                    String fileName= toLowerCaseFirstOne(key.substring(5));
+//                    大于等于
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(first.get(fileName), new Date((Long) value)));
+                }
+                if (key.indexOf("end") == 0) {
+                    String fileName= toLowerCaseFirstOne(key.substring(3));
+                    // 小于等于
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(first.get(fileName), new Date((Long) value)));
+                }
+            } else {
+                if (value instanceof JSONArray) {
+                    JSONArray jsonArray = (JSONArray)value;
+                    if (!jsonArray.isEmpty()) {
+                        JSONObject fisrtObject = jsonArray.getJSONObject(0);
+                        Object valueObject = getTableName(tClass,key,value);
+                        String tableName = getTableName(valueObject);
+                        Path table = root.join(key, JoinType.LEFT);
+                        List<Predicate> predicateList =  createPredicate(root,criteriaBuilder,fisrtObject,(Class<T>) valueObject.getClass(),table);
+                        predicates.addAll(predicateList);
+                    }
+                } else if (!MyReflectionUtil.isLgnore(value)) {
+                    predicates.add(criteriaBuilder.like(first.get(key).as(String.class), likeFomat(String.valueOf(value))));
+                } else if (value instanceof JSONObject) {
+                    JSONObject  jsonObject = (JSONObject)value;
                     Object valueObject = getTableName(tClass,key,value);
                     String tableName = getTableName(valueObject);
-                    Path table = first.get(key);
-                    List<Predicate> predicateList =  createPredicate(root,criteriaBuilder,fisrtObject,(Class<T>) valueObject.getClass(),table);
+                    Path table = root.join(tableName, JoinType.LEFT);
+                    List<Predicate> predicateList = createPredicate(root,criteriaBuilder,jsonObject,(Class<T>)valueObject.getClass(),table);
                     predicates.addAll(predicateList);
                 }
-            } else if (!MyReflectionUtil.isLgnore(value)) {
-                predicates.add(criteriaBuilder.like(first.get(key).as(String.class), likeFomat(String.valueOf(value))));
-            } else if (value instanceof JSONObject) {
-                JSONObject  jsonObject = (JSONObject)value;
-                Object valueObject = getTableName(tClass,key,value);
-                String tableName = getTableName(valueObject);
-                Path table = root.join(tableName, JoinType.LEFT);
-                List<Predicate> predicateList = createPredicate(root,criteriaBuilder,jsonObject,(Class<T>)valueObject.getClass(),table);
-                predicates.addAll(predicateList);
             }
         }
         return  predicates;
@@ -128,11 +145,11 @@ public class MyPrediceUtil {
         String className = tableName.substring(tableName.lastIndexOf(".") + 1);
        return new StringBuilder().append(className.substring(0,1).toLowerCase()).append(className.substring(1)).toString();
     }
-//    public static  String toLowerCaseFirstOne(String s){
-//        if (Character.isLowerCase(s.charAt(0))) {
-//            return s;
-//        } else {
-//            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-//        }
-//    }
+    public static  String toLowerCaseFirstOne(String s){
+        if (Character.isLowerCase(s.charAt(0))) {
+            return s;
+        } else {
+            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.okkristen.project.logic.test.entity;
 import com.okkristen.project.common.entity.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.Persistent;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,6 +43,10 @@ public class QueryEntity extends BaseEntity implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
     private List<Parent> parentList;
+
+    @Persistent
+    private  String login;
+
 
     public String getName() {
         return name;
@@ -129,5 +134,13 @@ public class QueryEntity extends BaseEntity implements Serializable {
 
     public void setParentList(List<Parent> parentList) {
         this.parentList = parentList;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

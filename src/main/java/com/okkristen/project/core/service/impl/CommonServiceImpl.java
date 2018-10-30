@@ -96,22 +96,26 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public List<E> findListByEntity(E entity, Sort sort) {
         return myRepository.findByEntity(entity,sort);
     }
 
     @Override
+    @Transactional
     public Page<E> findPageByEntity(E entity, Pageable pageable) {
         return myRepository.findByEntityAccurate(entity, pageable);
     }
 
     @Override
+    @Transactional
     public Page<D> findPageByDTO(D dto, Pageable pageable) {
         Page<E> entityPage = findPageByEntity(getOriginalEntity(dto),pageable);
         return getDTOPage(entityPage);
     }
 
     @Override
+    @Transactional
     public <T> Page<T> findPageByDTO(D dto, Pageable pageable, Class<T> tClass) {
         Page<E> entityPage = findPageByEntity(getOriginalEntity(dto),pageable);
         return getDTOPage(entityPage,tClass);
@@ -127,6 +131,7 @@ public class CommonServiceImpl<E, D> implements CommonService<E, D> {
     }
 
     @Override
+    @Transactional
     public <T> T getTargetDTO(E entity, Class<T> tClass) {
 //        try {
 //            T tObject = tClass.newInstance();

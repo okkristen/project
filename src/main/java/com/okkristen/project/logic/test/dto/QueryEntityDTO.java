@@ -41,6 +41,8 @@ public class QueryEntityDTO extends BaseEntity implements Serializable {
 
     private List<ParentDTO> parentList;
 
+    private  String login;
+
     public String getName() {
         return name;
     }
@@ -127,5 +129,13 @@ public class QueryEntityDTO extends BaseEntity implements Serializable {
 
     public void setParentList(List<ParentDTO> parentList) {
         this.parentList = parentList;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 }

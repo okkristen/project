@@ -1,16 +1,14 @@
 package com.okkristen.project.logic.test.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
-import com.okkristen.project.logic.test.dto.ParentDTO;
-import com.okkristen.project.logic.test.dto.QueryEntityDTO;
-import com.okkristen.project.logic.test.dto.StudentDTO;
-import com.okkristen.project.logic.test.dto.TeatherDTO;
-import com.okkristen.project.logic.test.entity.Teather;
+import com.okkristen.project.core.page.PageParam;
+import com.okkristen.project.core.utils.MyDateUtil;
+import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
 import com.okkristen.project.logic.test.service.StudentService;
 import com.okkristen.project.logic.test.service.TeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +46,8 @@ public class StudentController {
         if (studentDTO == null) {
             studentDTO = new StudentDTO();
         }
-//        studentDTO.setAge(1);
-        studentDTO.setName("杨2");
+        studentDTO.setAge(1);
+//        studentDTO.setName("杨2");
 //        List<StudentDTO> list = studentService.findListByDTO(studentDTO);
         Long start = System.currentTimeMillis();
         List<TeatherDTO> list1 = new ArrayList<>();
@@ -109,6 +107,9 @@ public class StudentController {
 //        System.out.println("时间" + (System.currentTimeMillis() - start));
 //        return AjaxResult.createSuccessResult(teatherDTOList);
         QueryEntityDTO queryEntityDTO = new QueryEntityDTO();
+        queryEntityDTO.setLogin("denglu");
+//        queryEntityDTO.setStartCreateTime(MyDateUtil.getToday0());
+//        queryEntityDTO.setEndCreateTime(MyDateUtil.getToday24());
 //        queryEntityDTO.setaByte(Byte.parseByte("111"));
         // 小数
 //        queryEntityDTO.setaDouble(Double.parseDouble("123"));
@@ -119,19 +120,24 @@ public class StudentController {
 //        queryEntityDTO.setMoney(BigDecimal.TEN);
 //         查询 有小数
 //        queryEntityDTO.setNum1(Float.valueOf("999"));
-//        studentDTO.setId("402881e766b01a1a0166b01bd1530000");
+//        studentDTO.setId("8a8080a666bda7f10166bda830560004");
 //        queryEntityDTO.setStudent(studentDTO);
 //        queryEntityDTO.setLongId(Long.valueOf("958"));
 //        queryEntityDTO.setName("测试");
         List<ParentDTO> parentDTOS = new ArrayList<>();
         ParentDTO parentDTO = new ParentDTO();
-//        parentDTO.setAge(11222);
+        parentDTO.setStudent(studentDTO);
+//        parentDTO.setAge(2);
 //        parentDTO.setSex(BigDecimal.valueOf(1));
-        parentDTO.setName("ccccccc");
+//        parentDTO.setName("ccccccc");
         parentDTOS.add(parentDTO);
         queryEntityDTO.setParentList(parentDTOS);
 //        queryEntityDTO =   queryEntityService.saveByDTO(queryEntityDTO);
-       List<QueryEntityDTO> queryEntityDTOs = queryEntityService.findListByDTO(queryEntityDTO);
+        PageParam<QueryEntityDTO> pageParam = new PageParam<>();
+        pageParam.setParam(queryEntityDTO);
+        List<QueryEntityDTO> queryEntityDTOqq = queryEntityService.findListByDTO(pageParam.getParam());
+        System.out.println("queryEntityDTOqq" + queryEntityDTOqq.size());
+       Page<QueryEntityDTO> queryEntityDTOs = queryEntityService.findPageByDTO(pageParam.getParam(),pageParam.getPageable());
         return AjaxResult.createSuccessResult(queryEntityDTOs);
     }
 //
@@ -164,21 +170,41 @@ public class StudentController {
 //        }
 //    }
 //
-//    /**
-//     * 保存
-//     *
-//     * @param examineGradeDTO
-//     * @return
-//     */
-//    @PostMapping("/save")
-//    public AjaxResult save(@RequestBody ExamineGradeDTO examineGradeDTO) {
-//        if (examineGradeDTO != null) {
-//            examineGradeDTO = examineGradeService.saveByDTO(examineGradeDTO);
-//            return AjaxResult.createSuccessResult(examineGradeDTO);
-//        } else {
-//            return AjaxResult.createErrorResult(MessageCode.SAVE_FAILED, "信息未填写完整");
-//        }
-//    }
+    /**
+     * 保存
+     *
+     * @param examineGradeDTO
+     * @return
+     */
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody ExamineGradeDTO examineGradeDTO) {
+        StudentDTO studentDTO = new StudentDTO();
+        QueryEntityDTO queryEntityDTO = new QueryEntityDTO();
+        queryEntityDTO.setaByte(Byte.parseByte("111"));
+        // 小数
+        queryEntityDTO.setaDouble(Double.parseDouble("123"));
+        queryEntityDTO.setAge(Integer.valueOf(5));
+        queryEntityDTO.setHappyTime(new Date());
+//         有问题
+        queryEntityDTO.setBool(Boolean.FALSE);
+        queryEntityDTO.setMoney(BigDecimal.TEN);
+//         查询 有小数
+        queryEntityDTO.setNum1(Float.valueOf("999"));
+        studentDTO.setId("8a8080a666bda7f10166bda830560004");
+        queryEntityDTO.setStudent(studentDTO);
+        queryEntityDTO.setLongId(Long.valueOf("958"));
+        queryEntityDTO.setName("测试");
+        List<ParentDTO> parentDTOS = new ArrayList<>();
+        ParentDTO parentDTO = new ParentDTO();
+        parentDTO.setAge(11222);
+        parentDTO.setSex(BigDecimal.valueOf(1));
+        parentDTO.setName("ccccccc");
+        parentDTOS.add(parentDTO);
+        queryEntityDTO.setParentList(parentDTOS);
+        queryEntityDTO =   queryEntityService.saveByDTO(queryEntityDTO);
+//       List<QueryEntityDTO> queryEntityDTOs = queryEntityService.findListByDTO(queryEntityDTO);
+        return AjaxResult.createSuccessResult(queryEntityDTO);
+    }
 //
 //    /**
 //     * 更新
