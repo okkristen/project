@@ -12,7 +12,7 @@ public class MySpecsUtil {
 
 
 
-    public static  <T>Specification<T>  getSpecbyEntity(final EntityManager entityManager, final T example) {
+    public static  <T>Specification<T>  getSpecbyEntity(final T example) {
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {

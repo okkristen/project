@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author fengw
  * @create 2016年11月16日
  * @param <E>
@@ -35,7 +34,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(pageable);
         }
-        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example),pageable);
+        return findAll(MySpecsUtil.getSpecbyEntity(example),pageable);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll();
         }
-        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example));
+        return findAll(MySpecsUtil.getSpecbyEntity(example));
     }
 
     @Override
@@ -51,7 +50,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll(sort);
         }
-        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example),sort);
+        return findAll(MySpecsUtil.getSpecbyEntity(example),sort);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class MyRepositoryImpl<E, ID extends Serializable> extends SimpleJpaRepos
         if (null == example) {
             return findAll();
         }
-        return findAll(MySpecsUtil.getSpecbyEntity(entityManager,example));
+        return findAll(MySpecsUtil.getSpecbyEntity(example));
     }
 
 
