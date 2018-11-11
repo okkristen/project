@@ -1,23 +1,30 @@
 package com.okkristen.project.logic.test.controller;
 
+import com.alibaba.fastjson.util.IOUtils;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
 import com.okkristen.project.core.utils.MyDateUtil;
+import com.okkristen.project.core.utils.MyVelocityUtil;
+import com.okkristen.project.core.utils.MyZipUtil;
 import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
 import com.okkristen.project.logic.test.service.StudentService;
 import com.okkristen.project.logic.test.service.TeatherService;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @author ysj
@@ -140,6 +147,99 @@ public class StudentController {
        Page<QueryEntityDTO> queryEntityDTOs = queryEntityService.findPageByDTO(pageParam.getParam(),pageParam.getPageable());
         return AjaxResult.createSuccessResult(queryEntityDTOs);
     }
+    /**
+     * 下载
+     */
+    /**
+     * 下载文件
+     *
+     * @param fileName
+     * @param response
+     * @return StreamingResponseBody
+     */
+    @GetMapping(value = "/downloadFile")
+    public StreamingResponseBody downloadFile(String fileName, HttpServletRequest request, HttpServletResponse response) {
+        String  filePath = System.getProperty("user.dir") + "\\views\\files\\file\\2\\数据结构.doc";
+        fileName = "测试.java";
+        Template template = MyVelocityUtil.getTemplate("DtoTemplate.java.vm");
+        VelocityContext ctx = new VelocityContext();
+        ctx.put("domainName", "Test");
+        ctx.put("domain","domain");
+        ctx.put("packageName","passssss");
+        MyVelocityUtil.getCustom(response,ctx,template,fileName);
+//        Template t =  MyVelocityUtil.getTemplate("/templates/hellovelocity.vm");
+//        // 获取模板文件
+//        // 设置变量
+//        VelocityContext ctx = MyVelocityUtil.getVelocityContext();
+//        ctx.put("name", "Velocity");
+//        List list = new ArrayList();
+//        list.add("1");
+//        list.add("2");
+//        ctx.put("list", list);
+//        if (fileName != null) {
+//            //设置文件路径
+//            File file = new File(filePath);
+//            if (file.exists()) {
+//                response.setContentType("application/force-download");// 设置强制下载不打开
+//                response.addHeader("Content-Disposition", "attachment;fileName=" + "aaa.java");// 设置文件名
+//                byte[] buffer = new byte[1024];
+//                FileInputStream fis = null;
+//                BufferedInputStream bis = null;
+//                try {
+//                    OutputStream outStream = response.getOutputStream();
+//                    OutputStreamWriter writer = new OutputStreamWriter(outStream,
+//                            "UTF-8");
+//                    BufferedWriter sw = new BufferedWriter(writer);
+//                    t.merge(ctx, sw);
+//                    sw.flush();
+//                    sw.close();
+//                    outStream.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    if (bis != null) {
+//                        try {
+//                            bis.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    if (fis != null) {
+//                        try {
+//                            fis.close();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        return null;
+    }
+
+    /**
+     * 打包压缩下载文件
+     */
+    @RequestMapping(value = "/downLoadZipFile")
+    public void downLoadZipFile(HttpServletResponse response) throws IOException{
+        String zipName = "myfile.zip";
+//        List<FileBean> fileList = fileService.getFileList();//查询数据库中记录
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition","attachment; filename="+zipName);
+        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
+        try {
+//            for(Iterator<FileBean> it = fileList.iterator();it.hasNext();){
+//                FileBean file = it.next();
+//                ZipUtils.doCompress(file.getFilePath()+file.getFileName(), out);
+//                response.flushBuffer();
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            out.close();
+        }
+    }
+
 //
 //    /**
 //     * 分页查询
