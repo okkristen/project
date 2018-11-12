@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -227,12 +228,35 @@ public class StudentController {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition","attachment; filename="+zipName);
         ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-        try {
-//            for(Iterator<FileBean> it = fileList.iterator();it.hasNext();){
-//                FileBean file = it.next();
-//                ZipUtils.doCompress(file.getFilePath()+file.getFileName(), out);
-//                response.flushBuffer();
-//            }
+            try {
+                response.setContentType("application/force-download");// 设置强制下载不打开
+                response.addHeader("Content-Disposition", "attachment;fileName=" + "cc.zip");// 设置文件名
+                List<InputStream> list = new ArrayList<>();
+                for (int i= 0; i< 5 ;i ++ ) {
+                    Template template = MyVelocityUtil.getTemplate("DtoTemplate.java.vm");
+                    VelocityContext ctx = new VelocityContext();
+                    ctx.put("domainName", "Test");
+                    ctx.put("domain","domain");
+                    ctx.put("packageName","passssss");
+                    StringWriter stringWriter = new StringWriter();
+                    template.merge(ctx,stringWriter);
+                    InputStream inputStream = new ByteArrayInputStream(stringWriter.toString().getBytes());
+                    list.add(inputStream);
+                }
+
+                byte[] buf = new byte[1024];
+                int len;
+                ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+                for (int i = 0; i < list.size(); i++) {
+                    InputStream in =list.get(i);
+                    zout.putNextEntry(new ZipEntry("DtoTemplate" + i + ".java"));
+                    while ((len = in.read(buf)) > 0) {
+                        zout.write(buf, 0, len);
+                    }
+                    zout.closeEntry();
+                    in.close();
+                }
+                zout.close();
         } catch (Exception e) {
             e.printStackTrace();
         }finally{

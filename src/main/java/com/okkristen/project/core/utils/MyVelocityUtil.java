@@ -58,8 +58,8 @@ public class MyVelocityUtil {
         VelocityContext ctx = getVelocityContext();
         ctx.put("name", "Velocity");
         List list = new ArrayList();
-        list.add("1");
         list.add("2");
+        list.add("1");
         ctx.put("list", list);
         // 输出
         Writer sw = getWriter(t,ctx);
@@ -112,3 +112,40 @@ public class MyVelocityUtil {
         }
     }
 }
+//    String[] names={"one.jpg","two.jpg","three.jpg","four.jpg"};
+//        //四个文件流
+//        FileInputStream input1 = new FileInputStream(new File("文件路径"));
+//        FileInputStream input2 = new FileInputStream(new File("文件路径"));
+//        FileInputStream input3 = new FileInputStream(new File("文件路径"));
+//        FileInputStream input4 = new FileInputStream(new File("文件路径"));
+//        FileInputStream[] inputs={input1,input2,input3,input4};
+//        //ZIP打包图片
+//        File zipFile = new File("压缩文件存放路径");
+//        byte[] buf = new byte[1024];
+//        int len;
+//        ZipOutputStream zout=new ZipOutputStream(new FileOutputStream(zipFile));
+//        for (int i = 0; i < inputs.length; i++) {
+//            FileInputStream in =inputs[i];
+//            zout.putNextEntry(new ZipEntry(names[i]));
+//            while ((len = in.read(buf)) > 0) {
+//                zout.write(buf, 0, len);
+//            }
+//            zout.closeEntry();
+//            in.close();
+//        }
+//        zout.close();
+//
+//
+//        //下载图片
+//        FileInputStream zipInput =new FileInputStream(zipFile);
+//        OutputStream out = response.getOutputStream();
+//        response.setContentType("application/octet-stream");
+//        response.setHeader("Content-Disposition", "attachment; filename=images.zip");
+//        while ((len=zipInput.read(buf))!= -1){
+//            out.write(buf,0,len);
+//        }
+//        zipInput.close();
+//        out.flush();
+//        out.close();
+//        //删除压缩包
+//        zipFile.delete();
