@@ -3,8 +3,8 @@ package $!{packageName}.dao;
 
 import $!{packageName}.entity.$!{domainName};
 
-
 public class $!{domainName}Dto extends BaseDto{
+
     private $!{domainName} $!{domain};
 
     public $!{domainName} get$!{domainName}() {

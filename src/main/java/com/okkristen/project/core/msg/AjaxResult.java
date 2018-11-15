@@ -116,6 +116,9 @@ public class AjaxResult implements Serializable  {
 	public static AjaxResult createErrorResult(MessageCode code) {
 		return new AjaxResult(MessageType.ERROR, code, null, code.getCodeInfo());
 	}
+	public static AjaxResult createErrorResult(MessageCode code,Exception e) {
+		return new AjaxResult(MessageType.ERROR, code, null, code.getCodeInfo());
+	}
 	public MessageType getType() {
 		return type;
 	}

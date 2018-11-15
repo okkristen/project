@@ -1,15 +1,10 @@
 package com.okkristen.project.logic.test.controller;
 
-import com.alibaba.fastjson.util.IOUtils;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
-import com.okkristen.project.core.utils.MyDateUtil;
 import com.okkristen.project.core.utils.MyVelocityUtil;
-import com.okkristen.project.core.utils.MyZipUtil;
 import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
-import com.okkristen.project.logic.test.service.StudentService;
-import com.okkristen.project.logic.test.service.TeatherService;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +14,10 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +32,6 @@ import java.util.zip.ZipOutputStream;
 @RestController
 @RequestMapping("/examine/student")
 public class StudentController {
-
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private TeatherService teatherService;
 
     @Autowired
     private QueryEntityService queryEntityService;
