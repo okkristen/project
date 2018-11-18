@@ -1,10 +1,10 @@
-package com.okkristen.project.logic.database.controller;
+package com.okkristen.project.logic.sys.controller;
 
 import com.okkristen.project.common.Base.BaseController;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
-import com.okkristen.project.logic.database.dto.DatabaseFiledDTO;
-import com.okkristen.project.logic.database.service.DatabaseFiledService;
+import com.okkristen.project.logic.sys.dto.SysModuleDTO;
+import com.okkristen.project.logic.sys.service.SysModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,11 +17,11 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/database/filed")
-public class DatabaseFiledController extends BaseController<DatabaseFiledDTO> {
+@RequestMapping("/sys/module")
+public class SysModuleController extends BaseController<SysModuleDTO> {
 
     @Autowired
-    private DatabaseFiledService service;
+    private SysModuleService service;
 
     /**
      * 查询所有数据
@@ -30,7 +30,7 @@ public class DatabaseFiledController extends BaseController<DatabaseFiledDTO> {
      * @return
      */
     @PostMapping("/findAll")
-    public AjaxResult findAll(@RequestBody PageParam<DatabaseFiledDTO> param) {
+    public AjaxResult findAll(@RequestBody PageParam<SysModuleDTO> param) {
         return super.findAll(service, param);
     }
 
@@ -41,7 +41,7 @@ public class DatabaseFiledController extends BaseController<DatabaseFiledDTO> {
      * @return
      */
     @PostMapping("/findPage")
-    public AjaxResult findPage(@RequestBody PageParam<DatabaseFiledDTO> param) {
+    public AjaxResult findPage(@RequestBody PageParam<SysModuleDTO> param) {
         return super.findPage(service, param);
     }
 
@@ -57,13 +57,13 @@ public class DatabaseFiledController extends BaseController<DatabaseFiledDTO> {
     }
 
     @PostMapping("/save")
-    public AjaxResult save(@RequestBody DatabaseFiledDTO dto) {
+    public AjaxResult save(@RequestBody SysModuleDTO dto) {
         AjaxResult  result = super.save(service,dto);
         return result;
     }
 
     @PostMapping("/update")
-    public AjaxResult update(@RequestBody DatabaseFiledDTO dto) {
+    public AjaxResult update(@RequestBody SysModuleDTO dto) {
         return super.save(service,dto);
     }
 

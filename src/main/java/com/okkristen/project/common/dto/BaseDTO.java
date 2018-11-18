@@ -17,7 +17,7 @@ public class BaseDTO {
     /**
      * 创建时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss,SSS")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @Transient
     private Date startCreateTime;
@@ -26,7 +26,7 @@ public class BaseDTO {
     /**
      * 修改时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss,SSS")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**

@@ -3,6 +3,7 @@ package com.okkristen.project.core.utils;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import javassist.bytecode.AnnotationsAttribute;
 import org.springframework.data.annotation.Persistent;
+import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -31,6 +32,12 @@ public class MyJsonUtil {
                 // 特殊要求字段名  直接 返回 不忽略
                 if (ignoreMethod(name)) {
                     return  true;
+                }
+//                空字符串 也同样忽略
+                if (value != null &&value instanceof String) {
+                    if (StringUtils.isEmpty(value)) {
+                        return false;
+                    }
                 }
                 Field field = MyReflectionUtil.findField(object.getClass(),name);
                 Annotation[] annotations =  field.getDeclaredAnnotations();
