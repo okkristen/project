@@ -1,6 +1,8 @@
 package com.okkristen.project.logic.sys.entity;
 
 import com.okkristen.project.common.entity.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 /**
  * 权限
  */
+@Getter
+@Setter
 @Entity
 public class SysPermission extends BaseEntity implements Serializable {
     /**
@@ -41,9 +45,5 @@ public class SysPermission extends BaseEntity implements Serializable {
     @JoinColumn(name = "module_id")
     @NotNull
     private SysModule module;
-
-
-
-
 
 }

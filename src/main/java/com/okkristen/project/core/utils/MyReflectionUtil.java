@@ -102,7 +102,7 @@ public class MyReflectionUtil extends ReflectionUtils {
       List<PropertyDescriptor> hasVlaueProertyDesctoptors = new ArrayList<>();
       for (PropertyDescriptor pb: propertyDescriptors) {
           Object value = invokeMethod(pb.getReadMethod(),exmple);
-          System.out.println(pb.getName());
+//          System.out.println(pb.getName());
           if (value != null) {
               if (value instanceof String && StringUtils.isEmpty(value)) {
                   continue;

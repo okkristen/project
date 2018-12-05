@@ -65,7 +65,7 @@ public class ExamineItemController {
         examineItemDTO.setGrade("");
         gradeDTO.setExamineItem(examineItemDTO);
         ExamineGrade grade = new ExamineGrade();
-        System.out.println(JSONObject.toJSONString(gradeDTO));
+//        System.out.println(JSONObject.toJSONString(gradeDTO));
         MyBeanUtil.copyObjectProperties(gradeDTO,grade);
 //        BeanUtils.copyProperties(gradeDTO,grade);
 //        MyBeanUtil.copyJsonObjectProperties(gradeDTO,grade);

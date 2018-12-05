@@ -4,6 +4,8 @@ import com.okkristen.project.common.dto.BaseDTO;
 import com.okkristen.project.common.entity.BaseEntity;
 import com.okkristen.project.logic.sys.entity.SysModule;
 import com.okkristen.project.logic.sys.entity.SysRole;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import java.io.Serializable;
 /**
  * 权限
  */
+@Getter
+@Setter
 public class SysPermissionMinDTO extends BaseDTO implements Serializable {
     /**
      *

@@ -44,7 +44,7 @@ public class FileController{
         String filePath = "/files/file/" + attachModule + "/";
         String newFilePath = uploadPath + filePath + newFileName;
         isExists(uploadPath , filePath + newFileName);
-        System.out.println(newFilePath);
+//        System.out.println(newFilePath);
         File newFile = new File(newFilePath);
         try {
             MyFileUtil.inputstreamtofile(file.getInputStream(),newFile);

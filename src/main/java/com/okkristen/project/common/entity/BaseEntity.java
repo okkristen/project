@@ -1,7 +1,10 @@
 package com.okkristen.project.common.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.*;
+import org.springframework.data.annotation.Persistent;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,10 +15,10 @@ import java.util.Date;
  * @create 2018-04-25
  **/
 @MappedSuperclass
-public class BaseEntity{
+public class BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid",	strategy = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid")
     @Column(columnDefinition = "varchar(32) comment 'ID'")
     private String id;
     /**

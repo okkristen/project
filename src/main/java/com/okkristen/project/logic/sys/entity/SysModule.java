@@ -2,6 +2,8 @@ package com.okkristen.project.logic.sys.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.okkristen.project.common.entity.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +14,8 @@ import java.util.List;
 /**
  * 菜单
  */
+@Getter
+@Setter
 @Entity
 public class SysModule extends BaseEntity implements Serializable {
     /**

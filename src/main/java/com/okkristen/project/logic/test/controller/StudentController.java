@@ -136,7 +136,6 @@ public class StudentController {
         PageParam<QueryEntityDTO> pageParam = new PageParam<>();
         pageParam.setParam(queryEntityDTO);
         List<QueryEntityDTO> queryEntityDTOqq = queryEntityService.findListByDTO(pageParam.getParam());
-        System.out.println("queryEntityDTOqq" + queryEntityDTOqq.size());
        Page<QueryEntityDTO> queryEntityDTOs = queryEntityService.findPageByDTO(pageParam.getParam(),pageParam.getPageable());
         return AjaxResult.createSuccessResult(queryEntityDTOs);
     }

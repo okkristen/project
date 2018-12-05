@@ -4,6 +4,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.okkristen.project.common.dto.BaseDTO;
 import com.okkristen.project.common.entity.BaseEntity;
 import com.okkristen.project.logic.sys.entity.SysPermission;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +16,8 @@ import java.util.List;
 /**
  * 菜单
  */
+@Getter
+@Setter
 public class SysModuleMinDTO extends BaseDTO implements Serializable {
     /**
      *
