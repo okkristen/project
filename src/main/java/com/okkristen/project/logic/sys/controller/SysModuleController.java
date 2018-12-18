@@ -17,7 +17,7 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/sys/module")
+@RequestMapping("/api/sys/module")
 public class SysModuleController extends BaseController<SysModuleDTO> {
 
     @Autowired

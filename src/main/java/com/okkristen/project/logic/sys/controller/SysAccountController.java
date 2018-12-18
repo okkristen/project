@@ -22,7 +22,7 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/sys/account")
+@RequestMapping("/api/sys/account")
 public class SysAccountController extends BaseController<SysAccountDTO> {
 
     @Autowired

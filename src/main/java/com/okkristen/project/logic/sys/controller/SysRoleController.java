@@ -18,7 +18,7 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/sys/role")
+@RequestMapping("/api/sys/role")
 public class SysRoleController extends BaseController<SysRoleDTO> {
 
     @Autowired

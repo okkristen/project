@@ -18,7 +18,7 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/sys/permission")
+@RequestMapping("/api/sys/permission")
 public class SysPermissionController extends BaseController<SysPermissionDTO> {
 
     @Autowired

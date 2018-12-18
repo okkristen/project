@@ -17,7 +17,7 @@ import java.util.List;
  * 字段名
  */
 @RestController
-@RequestMapping("/database/filed")
+@RequestMapping("/api/database/filed")
 public class DatabaseFiledController extends BaseController<DatabaseFiledDTO> {
 
     @Autowired
