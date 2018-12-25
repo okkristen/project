@@ -21,7 +21,8 @@ import java.util.List;
  * @author ysj
  * @create 2018-12-25
  **/
-@RestController
+@RestController(value="test")
+@RequestMapping("/test")
 public class LoginController {
     @Autowired
     SysAccountService sysAccountService;

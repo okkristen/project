@@ -8,6 +8,8 @@ import com.okkristen.project.logic.sys.service.SysAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 区级考核项信息ServiceImpl
  *
@@ -22,5 +24,15 @@ public class SysAccountServiceImpl extends CommonServiceImpl<SysAccount, SysAcco
     @Override
     public SysAccountDTO findByPasswordAndUserName(String password, String username) {
         return getDTO(sysAccountRepository.findByPasswordAndUsername(password,username));
+    }
+
+    @Override
+    public SysAccountDTO findByUserName(String username) {
+        List<SysAccount> list = sysAccountRepository.findByUsername(username);
+        if (list == null || list.isEmpty()) {
+            return  new SysAccountDTO();
+        } else {
+            return  getDTO(list.get(0));
+        }
     }
 }

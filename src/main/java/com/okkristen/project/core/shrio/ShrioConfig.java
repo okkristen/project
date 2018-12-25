@@ -32,6 +32,20 @@ public class ShrioConfig {
 
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        /**
+         * anon（匿名）  org.apache.shiro.web.filter.authc.AnonymousFilter
+         * authc（身份验证）       org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+         * authcBasic（http基本验证）    org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+         * logout（退出）        org.apache.shiro.web.filter.authc.LogoutFilter
+         * noSessionCreation（不创建session） org.apache.shiro.web.filter.session.NoSessionCreationFilter
+         * perms(许可验证)  org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
+         * port（端口验证）   org.apache.shiro.web.filter.authz.PortFilter
+         * rest  (rest方面)  org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
+         * roles（权限验证）  org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
+         * ssl （ssl方面）   org.apache.shiro.web.filter.authz.SslFilter
+         * member （用户方面）  org.apache.shiro.web.filter.authc.UserFilter
+         * user  表示用户不一定已通过认证,只要曾被Shiro记住过登录状态的用户就可以正常发起请求,比如rememberMe
+         */
         //游客，开发权限
         filterChainDefinitionMap.put("/guest/**", "anon");
         //用户，需要角色权限 “user”

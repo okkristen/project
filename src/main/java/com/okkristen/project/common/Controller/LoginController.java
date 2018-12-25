@@ -1,34 +1,51 @@
 package com.okkristen.project.common.Controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.core.msg.AjaxResult;
+import com.okkristen.project.logic.sys.dto.SysAccountDTO;
+import com.okkristen.project.logic.sys.service.SysAccountService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
 /**
  * 登陆登出 控制层
  */
-//@RestController
+@RestController
 public class LoginController {
-//    // 这里如果不写method参数的话，默认支持所有请求，如果想缩小请求范围，还是要添加method来支持get, post等等某个请求。
-//    @PostMapping("/login")
-//    public AjaxResult login(@RequestBody  JSONObject jsonObject) throws Exception {
-//        Subject subject = SecurityUtils.getSubject();
-//        System.out.println("登陆");
-//        //数据库的密码我进行了Md5加密。如果没有进行加密的无需这个
-//        //  user.setUserPassword(MD5Util.getPwd(user.getUserPassword()));
-//        UsernamePasswordToken token = new UsernamePasswordToken("admin","123456");
-//        token.setRememberMe(true);
-//        try {
-//            subject.login(token);
-//            return AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS);
-//        } catch (UnknownAccountException e){
-//            return AjaxResult.createErrorResult(MessageCode.QUERY_FAILED);
-//        } catch (IncorrectCredentialsException e){
-//            e.printStackTrace();
-//            return AjaxResult.createErrorResult(MessageCode.QUERY_FAILED);
-//        } catch (LockedAccountException e){
-//            return AjaxResult.createErrorResult(MessageCode.QUERY_FAILED);
-//        }catch (DisabledAccountException e){
-//            return  AjaxResult.createErrorResult(MessageCode.QUERY_FAILED);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return AjaxResult.createErrorResult(MessageCode.QUERY_FAILED);
-//        }
-//    }
+    @Autowired
+    SysAccountService sysAccountService;
+
+    @PostMapping("/login")
+    public AjaxResult login(@RequestBody JSONObject jsonObject) {
+        String username = jsonObject.getString("username");
+        String password = jsonObject.getString("password");
+        Boolean rembermer = Boolean.TRUE;
+        if (jsonObject.containsKey("rembermer")) {
+            rembermer = jsonObject.getBoolean("rembermer");
+        }
+        // 从SecurityUtils里边创建一个 subject
+        Subject subject = SecurityUtils.getSubject();
+        // 在认证提交前准备 token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        token.setRememberMe(rembermer);
+        // 执行认证登陆
+        subject.login(token);
+        //根据权限，指定返回数据
+        SysAccountDTO sysAccountDTO = sysAccountService.findByPasswordAndUserName(password,username);
+        List<String> list =  sysAccountDTO.getRoleListName();
+        if (list.contains("user")) {
+            return AjaxResult.createSuccessResult(sysAccountDTO);
+        }
+        if (list.contains("admin")) {
+            return AjaxResult.createSuccessResult(sysAccountDTO);
+        }
+        return AjaxResult.createSuccessResult("权限错误");
+    }
 }

@@ -1,5 +1,7 @@
 package com.okkristen.project.core.shrio.MyRealm;
 
+import com.okkristen.project.logic.sys.dto.SysAccountDTO;
+import com.okkristen.project.logic.sys.entity.SysAccount;
 import com.okkristen.project.logic.sys.service.SysAccountService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -7,11 +9,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,7 +23,7 @@ import java.util.Set;
  */
 public class MyShrioRealm  extends AuthorizingRealm {
     private static Logger logger = LoggerFactory.getLogger(MyShrioRealm.class);
-
+    @Autowired
     SysAccountService sysAccountService;
     /**
      * 获取身份验证信息
@@ -33,13 +37,14 @@ public class MyShrioRealm  extends AuthorizingRealm {
         System.out.println("————身份认证方法————");
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         // 从数据库获取对应用户名密码的用户
-        String password = "123";
+        String password = sysAccountService.findByUserName(token.getUsername()).getPassword();
         if (null == password) {
             throw new AccountException("用户名不正确");
         } else if (!password.equals(new String((char[]) token.getCredentials()))) {
             throw new AccountException("密码不正确");
         }
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+      return new SimpleAuthenticationInfo(token.getUsername(),password, ByteSource.Util.bytes(token.getUsername()),getName());
+//        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
     }
 
     /**
@@ -54,11 +59,10 @@ public class MyShrioRealm  extends AuthorizingRealm {
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         System.out.println("username" + username);
+        SysAccountDTO sysAccountDTO = sysAccountService.findByUserName(username);
         //获得该用户角色
-        String role = "admin";
-        Set<String> set = new HashSet<>();
-        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-        set.add(role);
+        List<String> roleNames = sysAccountDTO.getRoleListName();
+        Set<String> set = new HashSet<>(roleNames);
         //设置该用户拥有的角色
         info.setRoles(set);
         return info;

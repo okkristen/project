@@ -11,4 +11,6 @@ import com.okkristen.project.logic.test.entity.ExamineDistrict;
  */
 public interface SysAccountService extends CommonService<SysAccount, SysAccountDTO> {
     SysAccountDTO findByPasswordAndUserName(String password,String username);
+
+    SysAccountDTO findByUserName(String username);
 }
