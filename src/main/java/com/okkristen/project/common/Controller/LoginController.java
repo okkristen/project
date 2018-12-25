@@ -1,4 +1,4 @@
-package com.okkristen.project.common.commonController;
+package com.okkristen.project.common.Controller;
 
 /**
  * 登陆登出 控制层

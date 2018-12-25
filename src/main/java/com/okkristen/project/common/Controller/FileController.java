@@ -1,11 +1,10 @@
-package com.okkristen.project.common.commonController;
+package com.okkristen.project.common.Controller;
 
 import com.okkristen.project.core.config.Component.FilePathConfig;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.msg.MessageCode;
 import com.okkristen.project.core.utils.MyFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/file")

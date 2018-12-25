@@ -18,65 +18,56 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 public class ShrioConfig {
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        System.out.println("--------------------shiro filter-------------------");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
-        //注意过滤器配置顺序 不能颠倒
-        //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
-        // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/static/**", "anon");
-        filterChainDefinitionMap.put("/favicon.ico", "anon");
-        //拦截其他所以接口
-        filterChainDefinitionMap.put("/**", "anon");
-        //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-//        shiroFilterFactoryBean.setLoginUrl("/user/unlogin");
-        // 登录成功后要跳转的链接 自行处理。不用shiro进行跳转
-        // shiroFilterFactoryBean.setSuccessUrl("user/index");
-        //未授权界面;
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/user/unauth");
+        // setLoginUrl 如果不设置值，默认会自动寻找Web工程根目录下的"/login.jsp"页面 或 "/login" 映射
+        shiroFilterFactoryBean.setLoginUrl("/notLogin");
+        // 设置无权限时跳转的 url;
+        shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
+
+        // 设置拦截器
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        //游客，开发权限
+        filterChainDefinitionMap.put("/guest/**", "anon");
+        //用户，需要角色权限 “user”
+        filterChainDefinitionMap.put("/user/**", "roles[user]");
+        //管理员，需要角色权限 “admin”
+        filterChainDefinitionMap.put("/admin/**", "roles[admin]");
+        //开放登陆接口
+        filterChainDefinitionMap.put("/login", "anon");
+        //其余接口一律拦截
+        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
+        filterChainDefinitionMap.put("/**", "authc");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        System.out.println("Shiro拦截器工厂类注入成功");
         return shiroFilterFactoryBean;
     }
+
     /**
-     * shiro 用户数据注入
-     * @return
+     * 注入 securityManager
      */
     @Bean
-    public MyShrioRealm shiroRealm(){
-        MyShrioRealm shiroRealm = new MyShrioRealm();
-        return shiroRealm;
-    }
-    /**
-     * 配置管理层。即安全控制层
-     * @return
-     */
-    @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(shiroRealm());
-        return  securityManager;
+        // 设置realm.
+        securityManager.setRealm(myShrioRealm());
+        return securityManager;
     }
 
-    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
-        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
-        advisorAutoProxyCreator.setProxyTargetClass(true);
-        return advisorAutoProxyCreator;
-    }
     /**
-     * 开启shiro aop注解支持 使用代理方式所以需要开启代码支持
-     *  一定要写入上面advisorAutoProxyCreator（）自动代理。不然AOP注解不会生效
-     * @param securityManager
-     * @return
+     * 自定义身份认证 realm;
+     * <p>
+     * 必须写这个类，并加上 @Bean 注解，目的是注入 CustomRealm，
+     * 否则会影响 CustomRealm类 中其他类的依赖注入
      */
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager){
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
+    public MyShrioRealm myShrioRealm() {
+        return new MyShrioRealm();
     }
 }
