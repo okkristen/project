@@ -1,20 +1,19 @@
-package com.okkristen.project.core.shrio.utils;
+package com.okkristen.project.core.utils;
 
-import org.apache.shiro.SecurityUtils;
+import com.okkristen.project.core.shrio.utils.SessionUtil;
 
 /**
- * shrio的用户
  * @author ysj
- * @create 2018-12-25
+ * @create 2018-12-27
  **/
-public class SessionUtil {
+public class MyShrioUtil {
     /**
      * 保存到shrio中
      * @param key
      * @param value
      */
     public static void put (String key,Object value) {
-        SecurityUtils.getSubject().getSession().setAttribute(key,value);
+        SessionUtil.put(key,value);
     }
     /**
      * 去除 seesion 中对象
@@ -22,7 +21,7 @@ public class SessionUtil {
      * @return
      */
     public static void remove (String key) {
-        SecurityUtils.getSubject().getSession().removeAttribute(key);
+        SessionUtil.remove(key);
     }
     /**
      * 获取 保存对象
@@ -30,6 +29,6 @@ public class SessionUtil {
      * @return
      */
     public static Object get(String key) {
-        return SecurityUtils.getSubject().getSession().getAttribute(key);
+        return SessionUtil.get(key);
     }
 }

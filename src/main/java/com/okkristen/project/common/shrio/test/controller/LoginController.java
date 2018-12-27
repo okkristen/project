@@ -1,11 +1,12 @@
 package com.okkristen.project.common.shrio.test.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.common.dto.LoginAccountDTO;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.msg.MessageCode;
-import com.okkristen.project.logic.sys.dto.SysAccountDTO;
-import com.okkristen.project.logic.sys.entity.SysAccount;
-import com.okkristen.project.logic.sys.service.SysAccountService;
+import com.okkristen.project.core.logic.sys.dto.SysAccountDTO;
+import com.okkristen.project.core.logic.sys.entity.SysAccount;
+import com.okkristen.project.core.logic.sys.service.SysAccountService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,8 +80,8 @@ public class LoginController {
         // 执行认证登陆
         subject.login(token);
         //根据权限，指定返回数据
-        SysAccountDTO sysAccountDTO = sysAccountService.findByPasswordAndUserName(password,username);
-      List<String> list =  sysAccountDTO.getRoleListName();
+        LoginAccountDTO sysAccountDTO = sysAccountService.findByPasswordAndUserName(password,username);
+        List<String> list =  new ArrayList<>(); //sysAccountDTO.getRoleListName();
         if (list.contains("user")) {
             return AjaxResult.createSuccessResult("用户您好");
         }

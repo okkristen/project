@@ -31,7 +31,7 @@ public class BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     @Column(updatable = false)
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss,SSS")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @Transient
     private Date startCreateTime;

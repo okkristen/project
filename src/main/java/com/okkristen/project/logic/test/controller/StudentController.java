@@ -1,10 +1,12 @@
 package com.okkristen.project.logic.test.controller;
 
+import com.okkristen.project.common.enums.TemplateTypeEnum;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
 import com.okkristen.project.core.utils.MyVelocityUtil;
 import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
+import javassist.bytecode.ByteArray;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,10 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.net.URLEncoder;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -209,6 +207,52 @@ public class StudentController {
         return null;
     }
 
+//    /**
+//     * 打包压缩下载文件
+//     */
+//    @RequestMapping(value = "/downLoadZipFile")
+//    public void downLoadZipFile(HttpServletResponse response) throws IOException{
+//        String zipName = "myfile.zip";
+////        List<FileBean> fileList = fileService.getFileList();//查询数据库中记录
+//        response.setContentType("APPLICATION/OCTET-STREAM");
+//        response.setHeader("Content-Disposition","attachment; filename="+zipName);
+//        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
+//            try {
+//                response.setContentType("application/force-download");// 设置强制下载不打开
+//                response.addHeader("Content-Disposition", "attachment;fileName=" + "cc.zip");// 设置文件名
+//                List<InputStream> list = new ArrayList<>();
+//                for (int i= 0; i< 5 ;i ++ ) {
+//                    Template template = MyVelocityUtil.getTemplate(TemplateTypeEnum.Mybatis,"DtoTemplate.java.vm");
+//                    VelocityContext ctx = new VelocityContext();
+//                    ctx.put("domainName", "Test");
+//                    ctx.put("domain","domain");
+//                    ctx.put("packageName","passssss");
+//                    StringWriter stringWriter = new StringWriter();
+//                    template.merge(ctx,stringWriter);
+//                    InputStream inputStream = new ByteArrayInputStream(stringWriter.toString().getBytes());
+//                    list.add(inputStream);
+//                }
+//                byte[] buf = new byte[1024];
+//                int len;
+//                ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+//                for (int i = 0; i < list.size(); i++) {
+//                    InputStream in =list.get(i);
+//                    zout.putNextEntry(new ZipEntry("DtoTemplate" + i + ".java"));
+//                    while ((len = in.read(buf)) > 0) {
+//                        zout.write(buf, 0, len);
+//                    }
+//                    zout.closeEntry();
+//                    in.close();
+//                }
+//                zout.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }finally{
+//            out.close();
+//        }
+//    }
+
+
     /**
      * 打包压缩下载文件
      */
@@ -217,42 +261,92 @@ public class StudentController {
         String zipName = "myfile.zip";
 //        List<FileBean> fileList = fileService.getFileList();//查询数据库中记录
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition","attachment; filename="+zipName);
         ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-            try {
-                response.setContentType("application/force-download");// 设置强制下载不打开
-                response.addHeader("Content-Disposition", "attachment;fileName=" + "cc.zip");// 设置文件名
-                List<InputStream> list = new ArrayList<>();
-                for (int i= 0; i< 5 ;i ++ ) {
-                    Template template = MyVelocityUtil.getTemplate("DtoTemplate.java.vm");
-                    VelocityContext ctx = new VelocityContext();
-                    ctx.put("domainName", "Test");
-                    ctx.put("domain","domain");
-                    ctx.put("packageName","passssss");
-                    StringWriter stringWriter = new StringWriter();
-                    template.merge(ctx,stringWriter);
-                    InputStream inputStream = new ByteArrayInputStream(stringWriter.toString().getBytes());
-                    list.add(inputStream);
+        try {
+            // 设置强制下载不打开
+            response.setContentType("application/force-download");
+            // 设置文件名
+            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(zipName,"UTF-8"));
+            List<InputStream> list = new ArrayList<>();
+            byte[] buf = new byte[1024];
+            int len;
+            ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+            Map<String,InputStream> map = getTemplate();
+            for (Map.Entry<String,InputStream> entry : map.entrySet()) {
+               String key = entry.getKey();
+               InputStream is = entry.getValue();
+                zout.putNextEntry(new ZipEntry(getPath(key)));
+                while ((len = is.read(buf)) > 0) {
+                    zout.write(buf, 0, len);
                 }
-
-                byte[] buf = new byte[1024];
-                int len;
-                ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
-                for (int i = 0; i < list.size(); i++) {
-                    InputStream in =list.get(i);
-                    zout.putNextEntry(new ZipEntry("DtoTemplate" + i + ".java"));
-                    while ((len = in.read(buf)) > 0) {
-                        zout.write(buf, 0, len);
-                    }
-                    zout.closeEntry();
-                    in.close();
-                }
-                zout.close();
+                zout.closeEntry();
+                is.close();
+            }
+            zout.close();
         } catch (Exception e) {
             e.printStackTrace();
         }finally{
             out.close();
         }
+    }
+
+    // 拿到  几个模板 模板流
+    private  Map<String,InputStream> getTemplate() {
+        Map<String,InputStream> map = new HashMap<>();
+        List<InputStream> list = new ArrayList<>();
+        List<String> templateNames = MyVelocityUtil.getTemplate();
+        for (String templateName : templateNames) {
+//          模板
+            Template template = MyVelocityUtil.getTemplate(TemplateTypeEnum.Mybatis,templateName);
+            VelocityContext ctx = MyVelocityUtil.getVelocityContext();
+            ctx.put("domainName", "Test");
+            ctx.put("domain","domain");
+            ctx.put("packageName","passssss");
+            Writer stringWriter = new StringWriter();
+            template.merge(ctx,stringWriter);
+            InputStream inputStream = null;
+            try {
+                inputStream = new ByteArrayInputStream(new String( stringWriter.toString().getBytes("ISO-8859-1") , "utf-8").getBytes());
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            list.add(inputStream);
+            map.put(templateName,inputStream);
+        }
+        return map;
+    }
+
+    // 根据 模板 创建路径
+
+    public  String getPath (String key) {
+        String source = "src.main.java.";
+//        程序名
+        String projectNAME = source + "com.okkristen.project.";
+//        com.okkristen.project.logic.test
+//        logicName
+        String logicName = "logic.";
+        String customName = "user.fisrt.";
+        String domainName = "article.";
+//        String packageName = "article";
+        String domain = domainName.substring(0,1).toUpperCase() + domainName.substring(1);
+        String path = "";
+        if (key.contains("Controller")) {
+//          com.okkristen.project.logic.user.fisrt.article.controller
+            path = (projectNAME + logicName + customName + domainName + "controller").replaceAll("\\.","/");
+        }
+        if (key.contains("Dao")) {
+            path = (projectNAME + logicName + customName + domainName + "dao").replaceAll("\\.","/");
+        }
+        if (key.contains("Dto")) {
+            path = (projectNAME + logicName + customName + domainName + "dto").replaceAll("\\.","/");
+        }
+        if (key.contains("Impl")) {
+            path = (projectNAME + logicName + customName + domainName + "service.impl").replaceAll("\\.","/");
+        }
+        if (key.contains("ServiceTemplate.java.vm")) {
+            path = (projectNAME + logicName + customName + domainName +  "service").replaceAll("\\.","/");
+        }
+        return   path + "/" + (domain.replaceAll("\\.", "")) +  key.replace("Template", "33333").replace(".vm", "");
     }
 
 //

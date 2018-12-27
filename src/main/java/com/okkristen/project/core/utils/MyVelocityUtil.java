@@ -1,5 +1,6 @@
 package com.okkristen.project.core.utils;
 
+import com.okkristen.project.common.enums.TemplateTypeEnum;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 
@@ -30,6 +32,24 @@ public class MyVelocityUtil {
         return  template;
     }
 
+    /**
+     * 根据 类型来获取 模板
+     */
+    public static Template getTemplate(TemplateTypeEnum typeEnum, String templateName) {
+       return getTemplate(typeEnum.getPath() + templateName);
+    }
+
+    /**
+     * 获取模板名字
+     * @return
+     */
+    public static List<String> getTemplate() {
+        List<String> list = Arrays.asList("DaoTemplate.java.vm","DtoTemplate.java.vm","ServiceImplTemplate.java.vm","ServiceTemplate.java.vm","ControllerTemplate.java.vm");
+        return  new ArrayList<>(list);
+    }
+
+
+/*****************************************************************************/
     /**
      * 获取
      * @return

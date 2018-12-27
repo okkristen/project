@@ -1,8 +1,8 @@
 package com.okkristen.project.core.shrio.MyRealm;
 
-import com.okkristen.project.logic.sys.dto.SysAccountDTO;
-import com.okkristen.project.logic.sys.entity.SysAccount;
-import com.okkristen.project.logic.sys.service.SysAccountService;
+import com.okkristen.project.core.logic.sys.dto.SysAccountDTO;
+import com.okkristen.project.core.logic.sys.entity.SysAccount;
+import com.okkristen.project.core.logic.sys.service.SysAccountService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -43,8 +43,8 @@ public class MyShrioRealm  extends AuthorizingRealm {
         } else if (!password.equals(new String((char[]) token.getCredentials()))) {
             throw new AccountException("密码不正确");
         }
-      return new SimpleAuthenticationInfo(token.getUsername(),password, ByteSource.Util.bytes(token.getUsername()),getName());
-//        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+//      return new SimpleAuthenticationInfo(token.getUsername(),password, ByteSource.Util.bytes(token.getUsername()),getName());
+        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
     }
 
     /**

@@ -1,0 +1,13 @@
+#set ($domain = $!domainName.substring(0,1).toLowerCase()+$!domainName.substring(1))
+package $!{packageName}.dao;
+
+import com.okkristen.project.core.repository.MyRepository;
+import $!{packageName}.$!{domain}.entity.  $!{domainName};
+
+/**
+* 控制层
+ * @author ysj
+ * @create 2018-12-27
+ **/
+public interface $!{domainName}Repository extends MyRepository<$!{domainName},String> {
+}
