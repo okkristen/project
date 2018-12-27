@@ -1,19 +1,11 @@
 #set ($domain = $!domainName.substring(0,1).toLowerCase()+$!domainName.substring(1))
-package $!{packageName}.service;
+package $!{projectName}.$!{customPath}.$!{packageName}.service;
 
-import $!{packageName}.core.bean.PageEntity;
-import $!{packageName}.dto.BaseDto;
-import $!{packageName}.entity.${domainName};
+import $!{projectName}.core.service.CommonService;
+import $!{projectName}.$!{customPath}.$!{packageName}.$!{className}DTO;
+import $!{projectName}.$!{customPath}.$!{packageName}.entity.$!{className};
 
 
-public interface $!{domainName}Service {
-	void save($!{domainName} $!{domain});
+public interface $!{className}Service extends CommonService<$!{className}, $!{className}DTO> {
 
-	void delete($!{domainName} $!{domain});
-
-	void update($!{domainName} $!{domain});
-
-	$!{domainName} findById(int id);
-
-	PageEntity<$!{domainName}> query(BaseDto baseDto);
 }

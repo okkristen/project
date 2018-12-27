@@ -1,12 +1,12 @@
 #set ($domain = $!domainName.substring(0,1).toLowerCase()+$!domainName.substring(1))
-package $!{packageName}.dao;
+package $!{projectName}.$!{customPath}.$!{packageName}.dao;
 
-import com.okkristen.project.core.repository.MyRepository;
-import $!{packageName}.$!{domain}.entity.  $!{domainName};
+import $!{projectName}.core.repository.MyRepository;
+import $!{projectName}.$!{customPath}.$!{packageName}.entity.$!{className};
 
 /**
- * @author ysj
- * @create 2018-12-27
- **/
-public interface $!{domainName}Repository extends MyRepository<$!{domainName},String> {
+ *字段
+ */
+public interface $!{className}Repository extends MyRepository<$!{className}, String> {
+
 }

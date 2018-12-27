@@ -346,7 +346,7 @@ public class StudentController {
         if (key.contains("ServiceTemplate.java.vm")) {
             path = (projectNAME + logicName + customName + domainName +  "service").replaceAll("\\.","/");
         }
-        return   path + "/" + (domain.replaceAll("\\.", "")) +  key.replace("Template", "33333").replace(".vm", "");
+        return   path + "/" + (domain.replaceAll("\\.", "")) +  key.replace("Template", "").replace(".vm", "");
     }
 
 //

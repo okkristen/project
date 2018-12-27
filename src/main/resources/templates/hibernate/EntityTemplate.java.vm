@@ -1,17 +1,15 @@
 #set ($domain = $!domainName.substring(0,1).toLowerCase()+$!domainName.substring(1))
-package $!{projectName}.$!{customPath}.$!{packageName}.dto;
+package $!{projectName}.$!{customPath}.$!{packageName}.entity;
 
 import $!{projectName}.common.dto.BaseDTO;
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
 
-/**
- * 字段表
- */
+
 @Getter
 @Setter
-public class $!{className}DTO extends BaseDTO implements Serializable {
+public class $!{className} extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
