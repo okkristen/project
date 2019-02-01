@@ -2,6 +2,8 @@ package com.okkristen.project.logic.test.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.msg.AjaxResult;
+import com.okkristen.project.core.msg.MessageCode;
+import com.okkristen.project.core.redis.service.RedisService;
 import com.okkristen.project.core.utils.MyBeanUtil;
 import com.okkristen.project.core.utils.MyReflectionUtil;
 import com.okkristen.project.logic.test.dto.ExamineDistrictDTO;
@@ -36,6 +38,19 @@ public class ExamineItemController {
 
     @Autowired
     private ExamineItemService examineItemService;
+
+    @Autowired
+    private RedisService redisService;
+
+    @PostMapping("/redistest")
+    public AjaxResult redistest() {
+        System.out.println("测试");
+        redisService.set("test", "ceeee");
+        System.out.println(redisService.get("test"));
+        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS);
+    }
+
+
 //
 //    /**
 //     * 查询列表
