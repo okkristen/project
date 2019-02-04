@@ -1,6 +1,9 @@
 package com.okkristen.project.logic.test.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.core.JavaScan.ClassScannerUtils;
+import com.okkristen.project.core.global.GlobalUtils;
+import com.okkristen.project.core.javassist.JavassistUtil;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.msg.MessageCode;
 import com.okkristen.project.core.redis.service.RedisService;
@@ -14,6 +17,8 @@ import com.okkristen.project.logic.test.entity.ExamineDistrict;
 import com.okkristen.project.logic.test.entity.ExamineGrade;
 import com.okkristen.project.logic.test.entity.ExamineItem;
 import com.okkristen.project.logic.test.service.ExamineItemService;
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 /**
  * 考核项信息
@@ -43,11 +46,31 @@ public class ExamineItemController {
     private RedisService redisService;
 
     @PostMapping("/redistest")
-    public AjaxResult redistest() {
+    public AjaxResult findtest(@RequestBody JSONObject jsonObject) {
         System.out.println("测试");
+      ExamineItem examineItem = examineItemService.findById("1");
         redisService.set("test", "ceeee");
+        String className = "com.okkristen.project.entity.Dem";
+        Map<String,Class<?>> classMap = new HashMap<>();
+        classMap.put("name", String.class);
+        classMap.put("tel",String.class);
+        Object aClass = null;
+        try {
+            aClass = JavassistUtil.createClass(className,classMap);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        System.out.println(aClass);
         System.out.println(redisService.get("test"));
-        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS);
+        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, GlobalUtils.typesMap);
     }
 
 

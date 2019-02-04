@@ -1,5 +1,6 @@
 package com.okkristen.project.core.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import javassist.bytecode.AnnotationsAttribute;
 import org.springframework.data.annotation.Persistent;
@@ -68,4 +69,15 @@ public class MyJsonUtil {
         }
         return  false;
     }
+
+    /**
+     * 对象转Json
+     * @param object
+     * @return
+     */
+    public static JSONObject getJson(Object object) {
+        JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(object));
+        return  json;
+    }
+
 }

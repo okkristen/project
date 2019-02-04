@@ -122,8 +122,7 @@ public class JavassistUtil {
           }
       }
       addCtConstructor(new CtClass[]{},ctClass);
-//      addCtConstructor(getCtClasses(filedNames.keySet().toArray(new String[] {})),ctClass, new ArrayList<String>(filedNames.keySet()));
-      System.out.println(ctClass.toClass());
+      ctClass.toClass();
       return Class.forName(className).newInstance();
     }
 }
