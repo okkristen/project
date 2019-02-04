@@ -6,7 +6,6 @@ import com.okkristen.project.core.page.PageParam;
 import com.okkristen.project.core.utils.MyVelocityUtil;
 import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
-import javassist.bytecode.ByteArray;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.springframework.beans.factory.annotation.Autowired;

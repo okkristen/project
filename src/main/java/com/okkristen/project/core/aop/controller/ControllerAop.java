@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.global.GlobalUtils;
 import com.okkristen.project.core.javassist.JavassistUtil;
 import com.okkristen.project.core.msg.AjaxResult;
-import com.okkristen.project.core.msg.MessageCode;
-import com.okkristen.project.core.shrio.MyRealm.MyShrioRealm;
 import com.okkristen.project.core.utils.MyJsonUtil;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
@@ -46,10 +44,11 @@ public class ControllerAop {
         String methodName = pjd.getSignature().getName();
         List<Object> args = Arrays.asList(pjd.getArgs());
     //        拿到返回参数
-        String className = "com.okkristen.project.entity.Dem";
+        String className = "com.okkristen.project.entity.Dem" + UUID.randomUUID().toString().replaceAll("-","");
         Map<String,Class<?>>  classMap = getClass(args);
+        Object aClass = null;
         try {
-            Object aClass =  JavassistUtil.createClass(className,classMap);
+            aClass =  JavassistUtil.createClass(className,classMap);
             System.out.println(aClass);
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -75,6 +74,13 @@ public class ControllerAop {
         }
         //后置通知
         System.out.println("The aroundlogging method " + methodName + " end");
+        if (result instanceof AjaxResult) {
+            AjaxResult ajaxResult = (AjaxResult) result;
+            Object data = ajaxResult.getData();
+            JSONObject object = MyJsonUtil.getJson(data);
+            aClass = object.toJavaObject(aClass.getClass());
+            ajaxResult.setData(aClass);
+        }
         return result;
     }
 
@@ -97,7 +103,6 @@ public class ControllerAop {
             System.out.println("---------------");
             System.out.println(classMap);
             System.out.println("---------------");
-
         }
         return classMap;
     }

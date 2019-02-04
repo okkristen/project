@@ -9,14 +9,11 @@ import com.okkristen.project.core.shrio.MyRealm.MyShrioRealm;
 import javassist.ClassPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +44,7 @@ public class MyApplicationRunner implements ApplicationRunner {
               }
             }
         }
-//        利用map 初始化 JavassistUtil 类型池
+////        利用map 初始化 JavassistUtil 类型池
         ClassPool pool = JavassistUtil.getClassPool();
         Set<Map.Entry<String,Class<?>>> entrySet = typesMap.entrySet();
         for (Map.Entry<String,Class<?>> entry : entrySet) {

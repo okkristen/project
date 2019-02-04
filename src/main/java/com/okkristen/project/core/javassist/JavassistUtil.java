@@ -1,9 +1,8 @@
 package com.okkristen.project.core.javassist;
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtField;
+
 import javassist.*;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ public class JavassistUtil {
      * 获取类型
      * @return
      */
-    public static  CtClass[] getCtClasses(String [] strings) throws NotFoundException {
+    public static  CtClass[] getCtClasses(String [] strings) throws ChangeSetPersister.NotFoundException, NotFoundException {
         ClassPool pool = getClassPool();
         CtClass[] ctClasses = pool.get(strings);
         return ctClasses;
@@ -122,7 +121,6 @@ public class JavassistUtil {
           }
       }
       addCtConstructor(new CtClass[]{},ctClass);
-      ctClass.toClass();
-      return Class.forName(className).newInstance();
+      return ctClass.toClass().newInstance();
     }
 }

@@ -2,7 +2,6 @@ package com.okkristen.project.core.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
-import javassist.bytecode.AnnotationsAttribute;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.util.StringUtils;
 

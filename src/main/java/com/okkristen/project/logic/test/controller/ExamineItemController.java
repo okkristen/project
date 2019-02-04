@@ -49,28 +49,7 @@ public class ExamineItemController {
     public AjaxResult findtest(@RequestBody JSONObject jsonObject) {
         System.out.println("测试");
       ExamineItem examineItem = examineItemService.findById("1");
-        redisService.set("test", "ceeee");
-        String className = "com.okkristen.project.entity.Dem";
-        Map<String,Class<?>> classMap = new HashMap<>();
-        classMap.put("name", String.class);
-        classMap.put("tel",String.class);
-        Object aClass = null;
-        try {
-            aClass = JavassistUtil.createClass(className,classMap);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (CannotCompileException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-        System.out.println(aClass);
-        System.out.println(redisService.get("test"));
-        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, GlobalUtils.typesMap);
+        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, examineItem);
     }
 
 
