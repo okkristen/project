@@ -56,6 +56,7 @@ public class ExamineDistrictDTO implements Serializable {
     private Date updateTime;
 
     private  ExamineStreetDTO examineStreet;
+
     public String getId() {
         return id;
     }

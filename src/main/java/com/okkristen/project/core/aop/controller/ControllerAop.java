@@ -74,13 +74,13 @@ public class ControllerAop {
         }
         //后置通知
         System.out.println("The aroundlogging method " + methodName + " end");
-        if (result instanceof AjaxResult) {
-            AjaxResult ajaxResult = (AjaxResult) result;
-            Object data = ajaxResult.getData();
-            JSONObject object = MyJsonUtil.getJson(data);
-            aClass = object.toJavaObject(aClass.getClass());
-            ajaxResult.setData(aClass);
-        }
+//        if (result instanceof AjaxResult) {
+//            AjaxResult ajaxResult = (AjaxResult) result;
+//            Object data = ajaxResult.getData();
+//            JSONObject object = MyJsonUtil.getJson(data);
+//            aClass = object.toJavaObject(aClass.getClass());
+//            ajaxResult.setData(aClass);
+//        }
         return result;
     }
 

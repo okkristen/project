@@ -9,14 +9,15 @@ import com.okkristen.project.core.msg.MessageCode;
 import com.okkristen.project.core.redis.service.RedisService;
 import com.okkristen.project.core.utils.MyBeanUtil;
 import com.okkristen.project.core.utils.MyReflectionUtil;
-import com.okkristen.project.logic.test.dto.ExamineDistrictDTO;
-import com.okkristen.project.logic.test.dto.ExamineGradeDTO;
-import com.okkristen.project.logic.test.dto.ExamineItemDTO;
-import com.okkristen.project.logic.test.dto.ExamineStreetDTO;
+import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.entity.ExamineDistrict;
 import com.okkristen.project.logic.test.entity.ExamineGrade;
 import com.okkristen.project.logic.test.entity.ExamineItem;
+import com.okkristen.project.logic.test.entity.Teather;
+import com.okkristen.project.logic.test.service.ExamineDistrictService;
 import com.okkristen.project.logic.test.service.ExamineItemService;
+import com.okkristen.project.logic.test.service.StudentService;
+import com.okkristen.project.logic.test.service.TeatherService;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,12 @@ public class ExamineItemController {
 
     @Autowired
     private ExamineItemService examineItemService;
+    @Autowired
+    private ExamineDistrictService examineDistrictService;
+    @Autowired
+    private TeatherService teatherService;
+    @Autowired
+    private StudentService studentService;
 
     @Autowired
     private RedisService redisService;
@@ -48,8 +55,9 @@ public class ExamineItemController {
     @PostMapping("/redistest")
     public AjaxResult findtest(@RequestBody JSONObject jsonObject) {
         System.out.println("测试");
+        StudentDTO studentDTO =   studentService.findDTOById("11",StudentDTO.class);
       ExamineItem examineItem = examineItemService.findById("1");
-        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, examineItem);
+        return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, studentDTO);
     }
 
 

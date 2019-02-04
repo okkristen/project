@@ -27,9 +27,9 @@ public class StudentDTO  extends BaseDTO implements Serializable {
 
     private BigDecimal sex;
 
-    private TeatherDTO teather;
+    private TeatherBaseDTO teather;
 
-    private List<ParentDTO> parents;
+    private List<ParentBaseDTO> parents;
 
     public String getName() {
         return name;
@@ -55,19 +55,19 @@ public class StudentDTO  extends BaseDTO implements Serializable {
         this.sex = sex;
     }
 
-    public TeatherDTO getTeather() {
+    public TeatherBaseDTO getTeather() {
         return teather;
     }
 
-    public void setTeather(TeatherDTO teather) {
+    public void setTeather(TeatherBaseDTO teather) {
         this.teather = teather;
     }
 
-    public List<ParentDTO> getParents() {
+    public List<ParentBaseDTO> getParents() {
         return parents;
     }
 
-    public void setParents(List<ParentDTO> parents) {
+    public void setParents(List<ParentBaseDTO> parents) {
         this.parents = parents;
     }
 }

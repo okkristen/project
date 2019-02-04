@@ -48,7 +48,7 @@ public class JavassistUtil {
         CtField param = new CtField(getClassPool().get(tpyes.getName()), fieldName, ctClass);
         param.setModifiers(Modifier.PRIVATE);
 //        测试
-        ctClass.addField(param, CtField.Initializer.constant(""));
+        ctClass.addField(param);
         return param;
     }
 
