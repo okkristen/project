@@ -1,12 +1,13 @@
 package com.okkristen.project.core.global;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,5 +32,11 @@ public class GlobalUtils {
         typesMap.put("String",String.class);
         typesMap.put("BigDecimal", BigDecimal.class);
         typesMap.put("Date", Date.class);
+        typesMap.put("Serializable", Serializable.class);
+        typesMap.put("List", List.class);
+        typesMap.put("Set", Set.class);
+        typesMap.put("ArrayList", ArrayList.class);
+        typesMap.put("JSONObject",JSONObject.class);
+        typesMap.put("JSONArray",JSONArray.class);
     }
 }

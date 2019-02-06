@@ -1,5 +1,6 @@
 package com.okkristen.project.core.aop.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.okkristen.project.core.global.GlobalUtils;
 import com.okkristen.project.core.javassist.JavassistUtil;
@@ -29,7 +30,6 @@ public class ControllerAop {
 
     @Before("findMethod()")
     public void doBefore(JoinPoint joinPoint) {
-        System.out.println("11111111111");
     }
 
     @After("findMethod()")
@@ -37,7 +37,6 @@ public class ControllerAop {
         String methodName = joinPoint.getSignature().getName();
         System.out.println("The afterlogging method "+methodName+" end");
     }
-
     @Around(value = "findMethod()")
     public Object around(ProceedingJoinPoint pjd) {
         Object result = null;
@@ -48,17 +47,11 @@ public class ControllerAop {
         Map<String,Class<?>>  classMap = getClass(args);
         Object aClass = null;
         try {
-            aClass =  JavassistUtil.createClass(className,classMap);
+            aClass = JavassistUtil.getParam(MyJsonUtil.getJson(args.get(0)).getJSONObject("resultParam"));
             System.out.println(aClass);
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (CannotCompileException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+//            aClass =  JavassistUtil.createSimpleClass(className,classMap);
+            System.out.println(aClass);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
@@ -74,13 +67,13 @@ public class ControllerAop {
         }
         //后置通知
         System.out.println("The aroundlogging method " + methodName + " end");
-//        if (result instanceof AjaxResult) {
-//            AjaxResult ajaxResult = (AjaxResult) result;
-//            Object data = ajaxResult.getData();
-//            JSONObject object = MyJsonUtil.getJson(data);
-//            aClass = object.toJavaObject(aClass.getClass());
-//            ajaxResult.setData(aClass);
-//        }
+        if (result instanceof AjaxResult) {
+            AjaxResult ajaxResult = (AjaxResult) result;
+            Object data = ajaxResult.getData();
+            JSONObject object = MyJsonUtil.getJson(data);
+            Object o = object.toJavaObject(aClass.getClass());
+            ajaxResult.setData(o);
+        }
         return result;
     }
 

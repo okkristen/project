@@ -1,9 +1,13 @@
 package com.okkristen.project.core.javassist;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.okkristen.project.core.global.GlobalUtils;
 import javassist.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -123,4 +127,69 @@ public class JavassistUtil {
       addCtConstructor(new CtClass[]{},ctClass);
       return ctClass.toClass().newInstance();
     }
+
+    /**
+     * @return
+     */
+    public static Object createSimpleClass(String className, Map<String,Object> filedNames) throws CannotCompileException, IllegalAccessException, InstantiationException, NotFoundException {
+        CtClass ctClass =  getCtClass(className);
+        ctClass.addInterface(getClassPool().get(Serializable.class.getName()));
+        CtField uid = CtField.make("private static final long serialVersionUID = 1L; ", ctClass);
+        ctClass.addField(uid);
+//        创建
+        if (!filedNames.isEmpty()) {
+            Set<Map.Entry<String, Object>> entities =  filedNames.entrySet();
+            for (Map.Entry<String, Object> entry: entities) {
+                String key = entry.getKey();
+                Object clazz = entry.getValue();
+                CtField param = null;
+                if (clazz instanceof Class) {
+                    param = CtField.make(((Class) clazz).getName() + " " + key + ";", ctClass);
+                } else if (clazz instanceof String) {
+                    String src = clazz.toString() + "  " + key + "= "+ "new " + clazz.toString() + "()" +";";
+                    param = CtField.make(src, ctClass);
+                }
+                param.setModifiers(Modifier.PRIVATE);
+                ctClass.addField(param);
+                String methodName = String.valueOf(key.charAt(0)).toUpperCase() + key.substring(1);
+                ctClass.addMethod(CtNewMethod.setter("set" + methodName, param));
+                ctClass.addMethod(CtNewMethod.getter("get" + methodName, param));
+            }
+        }
+//        测试
+        addCtConstructor(new CtClass[]{},ctClass);
+        return ctClass.toClass().newInstance();
+    }
+
+    /**
+     * 处理接收参数 生成相对应的类  并且实现前端增加减少的返回值
+     */
+    public static Object        getParam(JSONObject jsonObject) throws CannotCompileException, InstantiationException, NotFoundException, IllegalAccessException {
+         String className = "com.aaa" + UUID.randomUUID().toString().replaceAll("-","");
+         Map<String,Object> filedNames = new HashMap<>();
+//       普通类型
+         Set<Map.Entry<String, Object>> entries = jsonObject.entrySet();
+         for (Map.Entry<String, Object> entity: entries) {
+             String key = entity.getKey();
+             Object value = entity.getValue();
+             if(value instanceof String) {
+                 filedNames.put(key, GlobalUtils.typesMap.get(value));
+             } else if (value instanceof JSONArray) {
+                 JSONArray jsonArray = (JSONArray)value;
+                 Object array = getParam(jsonArray.getJSONObject(0));
+                 System.out.println(jsonArray);
+                 String filedName = "java.util.ArrayList<com.okkristen.project.logic.other.database.entity.DatabaseFiled>";
+                 filedNames.put(key, filedName);
+             } else if (value instanceof JSONObject) {
+                 JSONObject jsonObject1 = (JSONObject)value;
+                 Object array = getParam(jsonObject1);
+                 System.out.println(array);
+                 filedNames.put(key, array.getClass().getName());
+             }
+         }
+         ArrayList<com.okkristen.project.logic.other.database.entity.DatabaseFiled> arrayList = new ArrayList<com.okkristen.project.logic.other.database.entity.DatabaseFiled>();
+         return createSimpleClass(className,filedNames);
+     }
+
+
 }

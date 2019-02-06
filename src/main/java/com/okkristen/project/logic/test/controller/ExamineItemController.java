@@ -56,7 +56,6 @@ public class ExamineItemController {
     public AjaxResult findtest(@RequestBody JSONObject jsonObject) {
         System.out.println("测试");
         StudentDTO studentDTO =   studentService.findDTOById("11",StudentDTO.class);
-      ExamineItem examineItem = examineItemService.findById("1");
         return  AjaxResult.createSuccessResultWithCode(MessageCode.UPDATE_SUCCESS, studentDTO);
     }
 
