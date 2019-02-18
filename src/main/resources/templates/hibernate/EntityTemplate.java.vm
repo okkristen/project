@@ -7,6 +7,10 @@ import lombok.Setter;
 import java.io.Serializable;
 
 
+@Entity
+@Table(name = "$!{className}")
+@DynamicUpdate
+@DynamicInsert
 @Getter
 @Setter
 public class $!{className} extends BaseEntity implements Serializable {
