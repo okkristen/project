@@ -38,5 +38,7 @@ public class GlobalUtils {
         typesMap.put("ArrayList", ArrayList.class);
         typesMap.put("JSONObject",JSONObject.class);
         typesMap.put("JSONArray",JSONArray.class);
+        List<Object> list = new ArrayList<Object>();
+        typesMap.put("list<Object>", list.getClass());
     }
 }

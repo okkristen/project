@@ -146,7 +146,8 @@ public class JavassistUtil {
                 if (clazz instanceof Class) {
                     param = CtField.make(((Class) clazz).getName() + " " + key + ";", ctClass);
                 } else if (clazz instanceof String) {
-                    String src = clazz.toString() + "  " + key + "= "+ "new " + clazz.toString() + "()" +";";
+//                    String src = clazz.toString() + "  " + key + "= "+ "new " + clazz.toString() + "()" +";";
+                    String src = clazz.toString() + "  " + key + ";";
                     param = CtField.make(src, ctClass);
                 }
                 param.setModifiers(Modifier.PRIVATE);
@@ -178,7 +179,7 @@ public class JavassistUtil {
                  JSONArray jsonArray = (JSONArray)value;
                  Object array = getParam(jsonArray.getJSONObject(0));
                  System.out.println(jsonArray);
-                 String filedName = "java.util.ArrayList<com.okkristen.project.logic.other.database.entity.DatabaseFiled>";
+                 String filedName = "java.util.ArrayList/*<"+array.getClass().getName()+">*/";
                  filedNames.put(key, filedName);
              } else if (value instanceof JSONObject) {
                  JSONObject jsonObject1 = (JSONObject)value;
