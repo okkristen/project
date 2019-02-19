@@ -10,5 +10,5 @@ import java.io.Serializable;
  * @author ysj
  * @create 2018-12-27
  **/
-public interface ArtileSerivce extends CommonService<Article,ArticleDTO>  {
+public interface ArticleSerivce extends CommonService<Article,ArticleDTO>  {
 }

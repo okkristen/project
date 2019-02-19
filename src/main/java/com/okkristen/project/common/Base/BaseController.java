@@ -93,7 +93,7 @@ public class BaseController<E> {
      */
     public <S extends CommonService> AjaxResult findOne(S service, String id, Class dtoClass) {
         try {
-            if (!StringUtils.isEmpty(id)) {
+            if (StringUtils.isEmpty(id)) {
                 return AjaxResult.createErrorResult(MessageCode.QUERY_FAILED, "数据ID不能为空");
             }
             if (dtoClass == null) {

@@ -6,20 +6,25 @@ import com.okkristen.project.core.page.PageParam;
 import com.okkristen.project.logic.other.database.service.DatabaseFiledService;
 import com.okkristen.project.logic.user.fisrt.article.dto.ArticleDTO;
 import com.okkristen.project.logic.user.fisrt.article.entity.Article;
+import com.okkristen.project.logic.user.fisrt.article.service.ArticleSerivce;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 /**
  * @author ysj
  * @create 2018-12-27
  **/
-public class ArtileController extends BaseController<Article> {
+@RestController
+@RequestMapping("/api/article")
+public class ArticleController extends BaseController<Article> {
 
     @Autowired
-    private DatabaseFiledService service;
+    private ArticleSerivce service;
 
     /**
      * 查询所有数据

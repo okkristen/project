@@ -37,7 +37,7 @@ public class ControllerAop {
         String methodName = joinPoint.getSignature().getName();
         System.out.println("The afterlogging method "+methodName+" end");
     }
-    @Around(value = "findMethod()")
+//    @Around(value = "findMethod()")
     public Object around(ProceedingJoinPoint pjd) {
         Object result = null;
         String methodName = pjd.getSignature().getName();
@@ -85,6 +85,9 @@ public class ControllerAop {
 //       首先测试只有一个参数
         if (args != null && !args.isEmpty()) {
             JSONObject jsonObject = MyJsonUtil.getJson(args.get(0));
+            if(!jsonObject.containsKey("resultParam")) {
+                return classMap;
+            }
             JSONObject returnParam = jsonObject.getJSONObject("resultParam");
             Set<Map.Entry<String, Object>> entries =  returnParam.entrySet();
 

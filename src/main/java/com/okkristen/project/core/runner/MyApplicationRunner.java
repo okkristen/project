@@ -27,7 +27,6 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("静态资源初始化");
 //       扫描 程序里的所有的实体类以及DTO 加入map
         Set<Class<?>> classes = ClassScannerUtils.searchClasses("com.okkristen.project");
         Map<String,Class<?>> typesMap = GlobalUtils.typesMap;
@@ -50,5 +49,6 @@ public class MyApplicationRunner implements ApplicationRunner {
         for (Map.Entry<String,Class<?>> entry : entrySet) {
             pool.makeClass(entry.getValue().getName());
         }
+        System.out.println("静态资源初始化");
     }
 }
