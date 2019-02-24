@@ -2,6 +2,8 @@ package com.okkristen.project.logic.user.fisrt.tag.dto;
 
 import com.okkristen.project.common.dto.BaseDTO;
 import com.okkristen.project.common.entity.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -9,6 +11,8 @@ import java.io.Serializable;
  * @author ysj
  * @create 2018-12-27
  **/
+@Getter
+@Setter
 public class TagDTO extends BaseDTO implements Serializable{
 
     private static final long serialVersionUID = 1L;

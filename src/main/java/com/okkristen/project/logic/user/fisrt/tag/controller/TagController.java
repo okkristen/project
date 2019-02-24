@@ -3,9 +3,9 @@ package com.okkristen.project.logic.user.fisrt.tag.controller;
 import com.okkristen.project.common.Base.BaseController;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
-import com.okkristen.project.logic.other.database.service.DatabaseFiledService;
 import com.okkristen.project.logic.user.fisrt.tag.dto.TagDTO;
 import com.okkristen.project.logic.user.fisrt.tag.entity.Tag;
+import com.okkristen.project.logic.user.fisrt.tag.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,10 +19,10 @@ import java.util.List;
  * @create 2018-12-27
  **/
 @RestController
-@RequestMapping("/api/tag")
+@RequestMapping("/api/first/tag")
 public class TagController extends BaseController<Tag> {
     @Autowired
-    private DatabaseFiledService service;
+    private TagService service;
 
     /**
      * 查询所有数据
