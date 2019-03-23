@@ -187,5 +187,10 @@ public interface CommonService<E, D> {
      */
     @Transactional
     public Integer deleteById(String id);
+
+////    导入导出通用实例
+//    public  void  importExample();
+////     导入导出通用实例
+//    public void exportExample();
 }
 

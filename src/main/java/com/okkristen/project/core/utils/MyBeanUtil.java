@@ -277,7 +277,7 @@ public class MyBeanUtil extends org.springframework.beans.BeanUtils {
     }
 
     /**
-     * 利用 Fast JSON 来转换 实体与DTO 相互转换
+     * 利用 FastJSON 来转换 实体与DTO 相互转换
      * @param source
      * @param tClass
      * @param <T>
