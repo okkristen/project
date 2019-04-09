@@ -1,6 +1,7 @@
 package com.okkristen.project.core.utils;
 
 import com.okkristen.project.common.enums.TemplateTypeEnum;
+import com.okkristen.project.core.generators.utils.MyVelocityUtil;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
@@ -9,6 +10,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -118,5 +120,60 @@ public class MyDownLoadUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+
+
+//    web端下载
+
+    /**
+     * web端获取 zip 压缩流
+     * @param response
+     * @param streamMap
+     * @param zipName
+     * @throws IOException
+     */
+    public static void getZip(HttpServletResponse response, Map<String,InputStream> streamMap,String zipName) throws IOException {
+    response.setContentType("APPLICATION/OCTET-STREAM");
+    try {
+        // 设置强制下载不打开
+        response.setContentType("application/force-download");
+        // 设置文件名
+        response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(zipName,"UTF-8"));
+        getZipOutputStream(response.getOutputStream(),streamMap);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+    /**
+     * 利用大量的input流 转 zip out流
+     * @param outputStream
+     * @param streamMap
+     * @return
+     */
+    public static ZipOutputStream getZipOutputStream(OutputStream outputStream, Map<String,InputStream> streamMap) throws IOException {
+        byte[] buf = new byte[1024];
+        int len;
+        ZipOutputStream zout = new ZipOutputStream(outputStream);
+        Map<String, InputStream> map = streamMap;
+            for (Map.Entry<String, InputStream> entry : map.entrySet()) {
+                String key = entry.getKey();
+                InputStream is = entry.getValue();
+                zout.putNextEntry(new ZipEntry(key));
+                while ((len = is.read(buf)) > 0) {
+                    zout.write(buf, 0, len);
+                }
+                zout.closeEntry();
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        zout.close();
+        return zout;
     }
 }

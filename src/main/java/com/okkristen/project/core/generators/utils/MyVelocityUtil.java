@@ -1,4 +1,4 @@
-package com.okkristen.project.core.utils;
+package com.okkristen.project.core.generators.utils;
 
 import com.okkristen.project.common.enums.TemplateTypeEnum;
 import org.apache.velocity.Template;
@@ -11,7 +11,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.zip.ZipEntry;
 
 /**
  * velocity工具类
@@ -169,3 +168,7 @@ public class MyVelocityUtil {
 //        out.close();
 //        //删除压缩包
 //        zipFile.delete();
+
+
+
+

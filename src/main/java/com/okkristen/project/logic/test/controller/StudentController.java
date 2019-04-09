@@ -1,9 +1,13 @@
 package com.okkristen.project.logic.test.controller;
 
 import com.okkristen.project.common.enums.TemplateTypeEnum;
+import com.okkristen.project.core.generators.environment.ControllerEnvironment;
+import com.okkristen.project.core.generators.environment.LogicEnvironment;
+import com.okkristen.project.core.generators.utils.EnvironmentUtils;
 import com.okkristen.project.core.msg.AjaxResult;
 import com.okkristen.project.core.page.PageParam;
-import com.okkristen.project.core.utils.MyVelocityUtil;
+import com.okkristen.project.core.generators.utils.MyVelocityUtil;
+import com.okkristen.project.core.utils.MyDownLoadUtil;
 import com.okkristen.project.logic.test.dto.*;
 import com.okkristen.project.logic.test.service.QueryEntityService;
 import org.apache.velocity.Template;
@@ -258,41 +262,12 @@ public class StudentController {
     @RequestMapping(value = "/downLoadZipFile")
     public void downLoadZipFile(HttpServletResponse response) throws IOException{
         String zipName = "myfile.zip";
-//        List<FileBean> fileList = fileService.getFileList();//查询数据库中记录
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-        try {
-            // 设置强制下载不打开
-            response.setContentType("application/force-download");
-            // 设置文件名
-            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(zipName,"UTF-8"));
-            List<InputStream> list = new ArrayList<>();
-            byte[] buf = new byte[1024];
-            int len;
-            ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
-            Map<String,InputStream> map = getTemplate();
-            for (Map.Entry<String,InputStream> entry : map.entrySet()) {
-               String key = entry.getKey();
-               InputStream is = entry.getValue();
-                zout.putNextEntry(new ZipEntry(getPath(key)));
-                while ((len = is.read(buf)) > 0) {
-                    zout.write(buf, 0, len);
-                }
-                zout.closeEntry();
-                is.close();
-            }
-            zout.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            out.close();
-        }
+        MyDownLoadUtil.getZip(response,getTemplate(),zipName);
     }
 
     // 拿到  几个模板 模板流
     private  Map<String,InputStream> getTemplate() {
         Map<String,InputStream> map = new HashMap<>();
-        List<InputStream> list = new ArrayList<>();
         List<String> templateNames = MyVelocityUtil.getTemplate();
         for (String templateName : templateNames) {
 //          模板
@@ -309,8 +284,7 @@ public class StudentController {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            list.add(inputStream);
-            map.put(templateName,inputStream);
+            map.put(getPath(templateName),inputStream);
         }
         return map;
     }
@@ -467,4 +441,38 @@ public class StudentController {
 //    public void exportExcel(ExcelExamineGradeDTO dto, Pageable pageable, HttpServletRequest request, HttpServletResponse response){
 //        examineGradeService.exportExcel(dto, pageable, "考核表信息", ExcelExamineGradeDTO.class, request, response);
 //    }
+
+
+
+    @RequestMapping(value = "/downLoadZipFile1")
+    public void downLoadZipFile1(HttpServletResponse response) throws IOException{
+        LogicEnvironment  logicEnvironment= new EnvironmentUtils().getLogicEnvironment();
+        String zipName = "myfile.zip";
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
+        try {
+            // 设置强制下载不打开
+            response.setContentType("application/force-download");
+            // 设置文件名
+            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(zipName,"UTF-8"));
+            List<InputStream> list = new ArrayList<>();
+            byte[] buf = new byte[1024];
+            int len;
+            ZipOutputStream zout = new ZipOutputStream(response.getOutputStream());
+//            业务环境 里面里面 包含着 contrller Service SerivceImpl  以及yDao  DTO entit 的环境配置
+          ControllerEnvironment controllerEnvironment =  logicEnvironment.getControllerEnvironment();
+            Template template = MyVelocityUtil.getTemplate(TemplateTypeEnum.Mybatis,"ControllerTemplate.java.vm");
+            VelocityContext ctx = MyVelocityUtil.getVelocityContext();
+            ctx.put("domainName", "Test");
+            ctx.put("domain","domain");
+            ctx.put("packageName","passssss");
+            Writer stringWriter = new StringWriter();
+            template.merge(ctx,stringWriter);
+            zout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            out.close();
+        }
+    }
 }

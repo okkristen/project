@@ -1,7 +1,7 @@
 package com.okkristen.project.common.enums;
 
 /**
- *  模板类型地址
+ *  模板类型地址 --- 以及后面的扩展
  */
 public enum TemplateTypeEnum {
 
